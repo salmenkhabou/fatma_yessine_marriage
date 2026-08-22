@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Yessine & Fatma - Invitation de Mariage | Timeless Grace</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Invitation de mariage élégante pour Yessine & Fatma - Sfax, Tunisie. Confirmez votre présence et découvrez le programme." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpg" href="logo.jpg" />
+
+  <!-- Google Fonts: Cinzel, Rufina, Ovo, Great Vibes, Pinyon Script, Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Ovo&family=Pinyon+Script&family=Rufina:wght@400;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Material Symbols for icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+
+  <!-- Leaflet Interactive Maps CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Main Stylesheet -->
+  <link href="style.css?v=4.0" rel="stylesheet" />
+
+  <!-- Standalone Opening & Audio Handlers -->
+  <script>
+    var timelessOpened = false;
+
+    function openTimelessInvitation() {
+      if (timelessOpened) return;
+      timelessOpened = true;
+
+      var weiOverlay = document.getElementById('weiOverlay');
+      var weiVideoWrap = document.getElementById('weiVideoWrap');
+      var weiVideo = document.getElementById('weiVideo');
+      var weiAudio = document.getElementById('weiAudio');
+      var weiAudioBtn = document.getElementById('weiAudioBtn');
+      var weiIconPause = document.getElementById('weiIconPause');
+      var weiIconPlay = document.getElementById('weiIconPlay');
+
+      // 1. Fade out overlay
+      if (weiOverlay) {
+        weiOverlay.style.opacity = '0';
+        weiOverlay.style.pointerEvents = 'none';
+        setTimeout(function() {
+          weiOverlay.style.display = 'none';
+          weiOverlay.style.visibility = 'hidden';
+        }, 1400);
+      }
+
+      // 2. Play background audio track
+      if (weiAudio) {
+        weiAudio.volume = 1;
+        var p = weiAudio.play();
+        if (p && p.then) {
+          p.then(function() {
+            if (weiAudioBtn) {
+              weiAudioBtn.style.visibility = 'visible';
+              weiAudioBtn.style.opacity = '1';
+            }
+            if (weiIconPause) weiIconPause.style.display = 'block';
+            if (weiIconPlay) weiIconPlay.style.display = 'none';
+          }).catch(function(err){ console.log("Audio play error:", err); });
+        }
+      }
+
+      // 3. Play golden light envelope opening video transition
+      if (weiVideoWrap && weiVideo) {
+        weiVideoWrap.style.display = 'flex';
+        weiVideoWrap.classList.remove('wei-video-out');
+        weiVideoWrap.classList.add('wei-video-in');
+
+        weiVideo.currentTime = 0;
+        var videoPlay = weiVideo.play();
+        if (videoPlay && videoPlay.catch) {
+          videoPlay.catch(function(err){ console.log("Video play error:", err); });
+        }
+
+        var faded = false;
+        var finishVideo = function() {
+          if (faded) return;
+          faded = true;
+          weiVideoWrap.classList.remove('wei-video-in');
+          weiVideoWrap.classList.add('wei-video-out');
+          setTimeout(function() {
+            weiVideoWrap.style.display = 'none';
+          }, 1400);
+        };
+
+        weiVideo.onended = finishVideo;
+        weiVideo.ontimeupdate = function() {
+          if (weiVideo.duration && weiVideo.duration > 1 && weiVideo.currentTime >= weiVideo.duration - 0.6) {
+            finishVideo();
+          }
+        };
+
+        setTimeout(finishVideo, 3200);
+      }
+    }
+
+    function toggleWeiAudio(forcePlay) {
+      var weiAudio = document.getElementById('weiAudio');
+      var weiIconPause = document.getElementById('weiIconPause');
+      var weiIconPlay = document.getElementById('weiIconPlay');
+      if (!weiAudio) return;
+
+      if (forcePlay === true || weiAudio.paused) {
+        var p = weiAudio.play();
+        if (p && p.catch) {
+          p.then(function() {
+            if (weiIconPause) weiIconPause.style.display = 'block';
+            if (weiIconPlay) weiIconPlay.style.display = 'none';
+          }).catch(function(err){ console.log("Audio toggle error:", err); });
+        }
+      } else {
+        weiAudio.pause();
+        if (weiIconPause) weiIconPause.style.display = 'none';
+        if (weiIconPlay) weiIconPlay.style.display = 'block';
+      }
+    }
+
+    function scrollToNextSection() {
+      var scratchEl = document.getElementById('scratch-section');
+      if (scratchEl) {
+        var rect = scratchEl.getBoundingClientRect();
+        var targetY = (window.pageYOffset || document.documentElement.scrollTop) + rect.top - 20;
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 600, behavior: 'smooth' });
+      }
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- Fullscreen Particle Canvas Overlay -->
+  <canvas id="canvas-particles"></canvas>
+  <audio id="weiAudio" loop>
+    <source src="https://pub-4dc8201144ca418fb604349c73e8c724.r2.dev/Einaudi_%20Divenire%20(1)%20(1).mp3" type="audio/mp3">
+  </audio>
+
+  <!-- 1. WEBGENCY FULLSCREEN ENVELOPE OVERLAY -->
+  <div id="weiOverlay" onclick="openTimelessInvitation()">
+    <img id="weiImg"
+      src="https://pub-96ce671efbac4dbfbc89b044c631a913.r2.dev/ChatGPT%20Image%20Jul%2027%2C%202026%2C%2001_02_07%20AM.png"
+      alt="Ouvrir votre invitation" draggable="false">
+    <div id="weiTapWrap">
+      <div class="wei-chevron"></div>
+      <div id="weiTapLabel">Appuyez pour ouvrir</div>
+    </div>
+  </div>
+
+  <!-- 2. ENVELOPE OPENING VIDEO TRANSITION -->
+  <div id="weiVideoWrap">
+    <video id="weiVideo"
+      src="https://pub-96ce671efbac4dbfbc89b044c631a913.r2.dev/Envelope_opening_with_golden_light_202607270136.mp4"
+      muted playsinline preload="auto"></video>
+  </div>
+
+  <!-- 3. FLOATING AUDIO TOGGLE BUTTON -->
+  <div id="weiAudioBtn" onclick="toggleWeiAudio()" aria-label="Activer ou couper la musique">
+    <svg id="weiIconPause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none">
+      <rect x="6" y="5" width="4" height="14" rx="1" />
+      <rect x="14" y="5" width="4" height="14" rx="1" />
+    </svg>
+    <svg id="weiIconPlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:block">
+      <polygon points="5,3 19,12 5,21" />
+    </svg>
+  </div>
+
+  <!-- MAIN INVITATION PAGE LAYOUT -->
+  <main id="main-content" style="max-width: 520px; margin: 0 auto; padding: 0 0 4rem;">
+
+    <!-- 4. HERO SECTION WITH VIDEO LOOP -->
+    <header class="timeless-hero-container">
+      <video class="hero-video-bg" autoplay muted loop playsinline
+        src="https://pub-4dc8201144ca418fb604349c73e8c724.r2.dev/Newbeautifulvideo.mp4"></video>
+      <div class="hero-radial-mask"></div>
+
+      <div class="hero-content-front">
+        <div class="hero-monogram-gold">YF</div>
+        <p style="font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.25em; color: var(--gold-dark); text-transform: uppercase; margin-top: 1.25rem;">
+          Invitation de Mariage
+        </p>
+        <h1 class="hero-names-title">Yessine & Fatma</h1>
+        <p style="font-family: 'Rufina', serif; font-style: italic; font-size: 0.95rem; color: var(--charcoal); opacity: 0.85;">
+          "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux"
+        </p>
+      </div>
+
+      <div class="scroll-down-hint" onclick="scrollToNextSection()" style="cursor: pointer;">
+        <span style="font-size: 0.9rem; font-family: 'Great Vibes', 'Pinyon Script', cursive; font-size: 1.6rem; color: #806B43;">Scroll down</span>
+        <span class="material-symbols-outlined bounce" style="font-size: 1.5rem; color: #806B43;">expand_more</span>
+      </div>
+
+      <!-- Swaying Bottom Floral Accents -->
+      <img src="flower_corner.png" class="hero-floral-left" alt="" />
+      <img src="flower_corner.png" class="hero-floral-right" alt="" />
+    </header>
+
+    <!-- 5. INTERACTIVE 3-CARD SCRATCH-TO-REVEAL DATE SECTION -->
+    <section id="scratch-section" class="scratch-card-box reveal-card">
+      <h2 style="font-family: 'Great Vibes', 'Pinyon Script', cursive; font-size: 2.8rem; color: #806B43; margin-bottom: 0.2rem;">
+        The Date
+      </h2>
+      <div class="gold-ornament-divider"><span class="gold-ornament-symbol">✦ Grattez pour révéler la date ✦</span></div>
+
+      <div class="scratch-3cards-row">
+        <!-- DAY -->
+        <div class="scratch-card-col">
+          <div class="scratch-canvas-wrap-small">
+            <div class="scratch-under-small">11</div>
+            <canvas id="scratchDay" width="105" height="110"></canvas>
+          </div>
+          <span class="scratch-card-label">JOUR</span>
+        </div>
+
+        <!-- MONTH -->
+        <div class="scratch-card-col">
+          <div class="scratch-canvas-wrap-small">
+            <div class="scratch-under-small scratch-month-font">JUILLET</div>
+            <canvas id="scratchMonth" width="105" height="110"></canvas>
+          </div>
+          <span class="scratch-card-label">MOIS</span>
+        </div>
+
+        <!-- YEAR -->
+        <div class="scratch-card-col">
+          <div class="scratch-canvas-wrap-small">
+            <div class="scratch-under-small">2026</div>
+            <canvas id="scratchYear" width="105" height="110"></canvas>
+          </div>
+          <span class="scratch-card-label">ANNÉE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ISLAMIC ARCH FORMAL INVITATION CARD -->
+    <section class="arch-invitation-card reveal-card">
+      <img src="bismillah_gold.png" style="max-width: 220px; height: auto; margin: 0 auto 0.75rem; display: block; animation: goldShimmer 5s infinite ease-in-out;" alt="Bismillah" />
+      
+      <p style="font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.22em; color: #806B43; text-transform: uppercase; margin-bottom: 1.25rem;">
+        VOUS ÊTES INVITÉS À LA CÉLÉBRATION DE MARIAGE DE
+      </p>
+
+      <h2 class="arch-names-title">Yessine</h2>
+      <div class="gold-ornament-divider" style="margin: 0.2rem auto 0.5rem;"><span class="gold-ornament-symbol">✧</span></div>
+      <p style="font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.18em; color: #888; text-transform: uppercase; margin-bottom: 1.25rem;">
+        FILS DE MR & MME SIALA
+      </p>
+
+      <p style="font-family: 'Great Vibes', cursive; font-size: 2rem; color: #806B43; margin: 0.5rem 0;">
+        Avec
+      </p>
+
+      <h2 class="arch-names-title">Fatma</h2>
+      <div class="gold-ornament-divider" style="margin: 0.2rem auto 0.5rem;"><span class="gold-ornament-symbol">✧</span></div>
+      <p style="font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.18em; color: #888; text-transform: uppercase; margin-bottom: 1.75rem;">
+        FILLE DE MR & MME KHABOU
+      </p>
+
+      <p style="font-family: 'Great Vibes', cursive; font-size: 2.2rem; color: #806B43; margin-bottom: 0.5rem;">
+        Chers Parents et Amis
+      </p>
+
+      <p style="font-family: 'Montserrat', sans-serif; font-size: 0.82rem; color: #555; line-height: 1.75; max-width: 330px; margin: 0 auto 1.5rem;">
+        Rejoignez-nous pour une soirée remplie d'amour, de bénédictions et de souvenirs inoubliables alors que nous commençons notre avenir ensemble.
+      </p>
+
+      <!-- Bottom Swaying Arch Corner Flowers -->
+      <img src="flower_corner.png" class="floral-corner-img floral-corner-bl" alt="" />
+      <img src="flower_corner.png" class="floral-corner-img floral-corner-br" alt="" />
+    </section>
+
+    <!-- 7. SPIRITUAL QUOTE / SOURATE AN-NABA -->
+    <section class="quran-quote-card reveal-card">
+      <p class="quran-verse-text">
+        "Et Nous vous avons créés en couples."
+      </p>
+      <p class="quran-verse-ref">(Sourate An-Naba 78:8)</p>
+      <div class="gold-ornament-divider" style="margin-top: 1rem;"><span class="gold-ornament-symbol">✧ ✦ ✧</span></div>
+    </section>
+
+    <!-- 8. LIVE COUNTDOWN TIMER ("THE CELEBRATION BEGINS") -->
+    <section class="quran-quote-card reveal-card" style="padding: 2.5rem 1.25rem; position: relative; overflow: visible;">
+      <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: #806B43; text-align: center; margin-bottom: 0.2rem;">
+        The Celebration Begins
+      </h3>
+      <div class="gold-ornament-divider"><span class="gold-ornament-symbol">✧ ✦ ✧</span></div>
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; max-width: 320px; margin: 1rem auto;">
+        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+          <span id="timer-days" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Jours</span>
+        </div>
+        <span style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-dark); font-weight: 700;">:</span>
+        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+          <span id="timer-hours" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Heures</span>
+        </div>
+        <span style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-dark); font-weight: 700;">:</span>
+        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+          <span id="timer-minutes" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Min</span>
+        </div>
+        <span style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-dark); font-weight: 700;">:</span>
+        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+          <span id="timer-seconds" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Sec</span>
+        </div>
+      </div>
+
+      <img src="flower_side.png" class="side-floral-left" alt="" />
+      <img src="flower_side.png" class="side-floral-right" alt="" />
+    </section>
+
+    <!-- 9. GOLDEN VERTICAL TIMELINE -->
+    <section class="quran-quote-card reveal-card" style="padding: 2.5rem 1.25rem;">
+      <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: #806B43; text-align: center; margin-bottom: 0.2rem;">
+        Wedding Timeline
+      </h3>
+      <div style="text-align: center; color: #CFAB66; margin-bottom: 2rem;">✧ ✦ ✧</div>
+
+      <div id="wedding-timeline-container" class="timeless-vertical-timeline">
+        <!-- Rendered dynamically via /api/timeline -->
+        <div class="timeline-row-item">
+          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
+            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">local_bar</span>
+          </div>
+          <div class="timeline-node-marker"></div>
+          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
+            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">18:00</span>
+            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Accueil & Rafraîchissements</span>
+          </div>
+        </div>
+
+        <div class="timeline-row-item">
+          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
+            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">18:30</span>
+            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Entrée des Mariés</span>
+          </div>
+          <div class="timeline-node-marker"></div>
+          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
+            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">favorite</span>
+          </div>
+        </div>
+
+        <div class="timeline-row-item">
+          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
+            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">mosque</span>
+          </div>
+          <div class="timeline-node-marker"></div>
+          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
+            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">19:30</span>
+            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Salat al Isha</span>
+          </div>
+        </div>
+
+        <div class="timeline-row-item">
+          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
+            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">20:30</span>
+            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Ouverture du Buffet</span>
+          </div>
+          <div class="timeline-node-marker"></div>
+          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
+            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">restaurant</span>
+          </div>
+        </div>
+
+        <div class="timeline-row-item">
+          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
+            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">music_note</span>
+          </div>
+          <div class="timeline-node-marker"></div>
+          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
+            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">22:00</span>
+            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Célébration & Soirée</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9.5. EMBEDDED INTERACTIVE MAP SECTION -->
+    <section id="map-section" class="quran-quote-card reveal-card" style="text-align: center; padding: 2rem 1.25rem;">
+      <h3 style="font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 0.15em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 0.35rem;">
+        Emplacements des Festivités
+      </h3>
+      <p style="font-family: 'Rufina', serif; font-style: italic; font-size: 0.9rem; color: #666; margin-bottom: 1.25rem;">
+        Carte interactive des lieux — Sfax, Tunisie
+      </p>
+
+      <div id="inline-map" style="height: 320px; width: 100%; border-radius: 16px; border: 1.5px solid var(--gold-light); overflow: hidden; margin-bottom: 1.25rem; z-index: 1;"></div>
+
+      <div id="inline-venues-grid" style="display: flex; flex-direction: column; gap: 0.85rem;"></div>
+    </section>
+
+    <!-- 10. DRESS CODE & RECOMMENDATIONS -->
+    <section class="dress-code-box reveal-card">
+      <h3 style="font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 0.15em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 0.5rem;">
+        Code Vestimentaire
+      </h3>
+      <p style="font-family: 'Rufina', serif; font-style: italic; font-size: 0.95rem; color: #666;">
+        Tenue Traditionnelle ou Élégante aux tons doux pastel
+      </p>
+
+      <div class="swatch-grid">
+        <div>
+          <div class="swatch-circle" style="background: #F4C2C2;"></div>
+          <span class="swatch-label">Rose Poudré</span>
+        </div>
+        <div>
+          <div class="swatch-circle" style="background: #9CAF88;"></div>
+          <span class="swatch-label">Vert Sauge</span>
+        </div>
+        <div>
+          <div class="swatch-circle" style="background: #F7E7CE;"></div>
+          <span class="swatch-label">Champagne</span>
+        </div>
+        <div>
+          <div class="swatch-circle" style="background: #B0C4DE;"></div>
+          <span class="swatch-label">Bleu Céleste</span>
+        </div>
+      </div>
+
+      <div class="reserved-notice">
+        <strong>Remarque attentionnée :</strong> Veuillez éviter les teintes beiges réservées aux mariés.
+      </div>
+    </section>
+
+    <!-- 10.5. GIFT PREFERENCES / registry CARD -->
+    <section class="quran-quote-card reveal-card" style="text-align: center; padding: 2rem 1.25rem;">
+      <span class="material-symbols-outlined" style="font-size: 2rem; color: var(--gold-dark); margin-bottom: 0.35rem;">card_giftcard</span>
+      <h3 style="font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 0.15em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 0.35rem;">
+        Vœux & Attentions
+      </h3>
+      <p style="font-family: 'Rufina', serif; font-style: italic; font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+        Votre présence est le plus beau des cadeaux. Si vous souhaitez nous gâter pour le début de notre vie à deux :
+      </p>
+      <div style="background: rgba(253, 244, 235, 0.8); border: 1px dashed var(--gold-light); border-radius: 12px; padding: 1rem;">
+        <p style="font-family: 'Montserrat', sans-serif; font-size: 0.75rem; color: var(--charcoal); font-weight: 600;">
+          Une urne sera mise à votre disposition lors de la soirée.
+        </p>
+      </div>
+    </section>
+
+    <!-- 11. ACTION BUTTONS (RSVP, MAP & GUESTBOOK) -->
+    <section class="reveal-card" style="padding: 0 1rem; display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+      <button id="open-rsvp-btn" style="background: var(--charcoal); color: #ffffff; border: none; padding: 1.1rem 1.5rem; border-radius: 14px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 8px 25px rgba(56, 46, 37, 0.25); transition: transform 0.3s ease;">
+        <span class="material-symbols-outlined">how_to_reg</span> Confirmer Votre Présence (RSVP)
+      </button>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button id="open-map-btn" style="flex: 1; background: #ffffff; color: var(--gold-dark); border: 1.5px solid var(--gold); padding: 0.85rem 1rem; border-radius: 12px; font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+          <span class="material-symbols-outlined">map</span> Carte Lieu
+        </button>
+
+        <button id="open-messages-wall-btn" style="flex: 1; background: #ffffff; color: var(--gold-dark); border: 1.5px solid var(--gold); padding: 0.85rem 1rem; border-radius: 12px; font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+          <span class="material-symbols-outlined">favorite</span> Mots Doux ❤️
+        </button>
+      </div>
+    </section>
+
+    <!-- 12. LUXURY FOOTER -->
+    <footer style="text-align: center; margin-top: 3.5rem; padding-top: 2rem; border-top: 1px dashed var(--gold-light);">
+      <h3 style="font-family: 'Pinyon Script', cursive; font-size: 2.5rem; color: var(--gold-dark); margin-bottom: 0.25rem;">
+        Yessine & Fatma
+      </h3>
+      <p style="font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; color: #888; text-transform: uppercase;">
+        Au plaisir de célébrer ensemble
+      </p>
+
+      <div style="margin-top: 1.5rem;">
+        <a href="admin.html" class="admin-footer-btn">
+          <span class="material-symbols-outlined">lock</span> Espace Administration
+        </a>
+      </div>
+
+      <p style="font-family: 'Montserrat', sans-serif; font-size: 0.6rem; color: #aaa; margin-top: 1.5rem; letter-spacing: 0.1em;">
+        © 2026 YESSINE & FATMA. TOUS DROITS RÉSERVÉS.
+      </p>
+    </footer>
+
+  </main>
+
+  <!-- MODAL: MESSAGES D'AMOUR / GUESTBOOK -->
+  <div id="messages-modal" class="modal-overlay">
+    <div class="modal-container messages-modal-container">
+      <button class="modal-close" id="messages-close-btn" aria-label="Fermer les messages">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <h3 class="modal-title">Messages d'Amour</h3>
+      <p class="modal-subtitle">Laissez un mot doux aux mariés Yessine & Fatma ❤️</p>
+
+      <form id="cute-message-form" class="luxury-form" style="margin-bottom: 1.5rem;">
+        <div class="form-group">
+          <label for="msg-sender-name">Votre Nom & Prénom</label>
+          <input type="text" id="msg-sender-name" class="form-input" required placeholder="Ex: Salmen Khabou" />
+        </div>
+        <div class="form-group">
+          <label for="msg-content-text">Votre Mot Doux / Vœux</label>
+          <textarea id="msg-content-text" class="form-textarea" rows="3" required
+            placeholder="Félicitations aux mariés Yessine & Fatma..."></textarea>
+        </div>
+        <button type="submit" id="msg-submit-btn" class="btn-luxury btn-gold w-full">
+          <span class="material-symbols-outlined">favorite</span> Envoyer avec Amour ❤️
+        </button>
+      </form>
+      <div id="msg-success-alert" class="search-error-box hidden"
+        style="background:#f0fdf4; border-color:#10b981; color:#047857;"></div>
+
+      <div class="messages-wall-container">
+        <h4
+          style="font-family:var(--font-sans); font-size:0.7rem; font-weight:700; letter-spacing:0.1em; color:var(--gold-dark); text-transform:uppercase; margin-bottom:0.75rem;">
+          Mots Doux Partagés par les Invités</h4>
+        <div id="messages-wall-list" class="messages-wall-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MAP LIEUX DES ÉVÉNEMENTS -->
+  <div id="map-modal" class="modal-overlay">
+    <div class="modal-container map-modal-wide">
+      <button class="modal-close" id="map-close-btn" aria-label="Fermer la carte">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <h3 class="modal-title">Emplacements des Événements</h3>
+      <p class="modal-subtitle">Carte interactive des festivités — Sfax, Tunisie</p>
+
+      <div id="interactive-map-container" class="map-interactive-wrapper">
+        <div id="public-map" style="height: 380px; width: 100%; border-radius: 14px; overflow: hidden; z-index: 1;"></div>
+      </div>
+
+      <div id="map-venues-grid" class="map-venues-grid" style="margin-top: 1.5rem;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: RSVP RECHERCHE & CONFIRMATION -->
+  <div id="rsvp-modal" class="modal-overlay">
+    <div class="modal-container rsvp-modal-container">
+      <button class="modal-close" id="rsvp-close-btn" aria-label="Fermer le RSVP">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div id="rsvp-stage-search" class="rsvp-stage">
+        <h3 class="modal-title">Trouver Votre Invitation</h3>
+        <p class="modal-subtitle">Entrez votre nom complet ou le nom de votre famille pour confirmer votre présence</p>
+
+        <div class="luxury-form mt-4">
+          <div class="form-group">
+            <label for="guest-search-input">Nom Complet / Famille</label>
+            <input type="text" id="guest-search-input" placeholder="Ex: Khabou, Salmen..." />
+          </div>
+          <button id="guest-search-btn" class="btn-luxury btn-gold w-full">
+            <span class="material-symbols-outlined">search</span> Rechercher
+          </button>
+        </div>
+        <div id="search-error-msg" class="search-error-box hidden"></div>
+
+        <div id="search-results" class="search-results-list hidden">
+          <p class="results-heading">Cliquez sur votre nom ci-dessous :</p>
+          <div id="results-container" class="results-container"></div>
+        </div>
+      </div>
+
+      <div id="rsvp-stage-confirm" class="rsvp-stage hidden">
+        <h3 class="modal-title">Confirmer Votre Présence</h3>
+        <p class="modal-subtitle" id="rsvp-guest-title-display">Invitation pour [Nom]</p>
+
+        <form id="rsvp-confirm-form" class="luxury-form mt-4">
+          <div class="seats-allowance-banner">
+            <span class="material-symbols-outlined">info</span>
+            <span id="rsvp-seats-limit-text">Votre invitation comprend un maximum de X personnes.</span>
+          </div>
+
+          <div class="form-group select-status-group">
+            <label>Serez-vous présent ?</label>
+            <div class="radio-card-options">
+              <label class="radio-card select-attending">
+                <input type="radio" name="rsvp-status" value="confirmed" checked required />
+                <span class="radio-card-btn">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  <strong>Oui, présent</strong>
+                </span>
+              </label>
+              <label class="radio-card select-declining">
+                <input type="radio" name="rsvp-status" value="declined" required />
+                <span class="radio-card-btn">
+                  <span class="material-symbols-outlined">cancel</span>
+                  <strong>Non, absent</strong>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" id="confirmed-guests-group">
+            <label for="rsvp-confirmed-count">Nombre de Personnes Présentes</label>
+            <select id="rsvp-confirmed-count" class="form-select"></select>
+          </div>
+
+          <div class="form-group">
+            <label for="rsvp-email">Adresse E-mail (facultatif)</label>
+            <input type="email" id="rsvp-email" placeholder="nom@domaine.com" />
+          </div>
+
+          <div class="form-group">
+            <label for="rsvp-dietary">Régime Spécial / Allergies (facultatif)</label>
+            <textarea id="rsvp-dietary" rows="2" placeholder="Ex: Sans gluten, végétarien..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="rsvp-message">Un message pour les mariés (facultatif)</label>
+            <textarea id="rsvp-message" rows="3" placeholder="Félicitations, vœux..."></textarea>
+          </div>
+
+          <button type="submit" id="rsvp-submit-btn" class="btn-luxury btn-gold w-full">
+            <span class="material-symbols-outlined">send</span> Confirmer
+          </button>
+        </form>
+      </div>
+
+      <div id="rsvp-stage-success" class="rsvp-stage hidden">
+        <div class="success-icon-container">
+          <span class="material-symbols-outlined success-check-icon">check_circle</span>
+        </div>
+        <h3 class="modal-title">Merci Beaucoup !</h3>
+        <p class="modal-subtitle" id="rsvp-success-thank-you">Votre réponse a bien été enregistrée.</p>
+        <div class="rsvp-summary-box">
+          <p><strong>Statut :</strong> <span id="summary-status-badge">Confirmé</span></p>
+          <p id="summary-guests-line"><strong>Nombre d'invités :</strong> <span id="summary-guests-count">X</span> personnes</p>
+        </div>
+        <button id="success-done-btn" class="btn-luxury btn-gold w-full mt-4">Fermer</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Main Script -->
+  <script src="app.js?v=2.0"></script>
+  <!-- Leaflet Map JS (Loaded asynchronously) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" async></script>
+</body>
+
+</html>

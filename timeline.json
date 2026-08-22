@@ -1,0 +1,44 @@
+[
+  {
+    "id": "tl-1",
+    "time": "18:00",
+    "title": "Accueil & Rafraîchissements",
+    "icon": "local_bar",
+    "description": "Bienvenue et rafraîchissements pour les invités"
+  },
+  {
+    "id": "tl-2",
+    "time": "18:30",
+    "title": "Entrée des Mariés",
+    "icon": "favorite",
+    "description": "Arrivée féerique de Yessine & Fatma"
+  },
+  {
+    "id": "tl-3",
+    "time": "19:30",
+    "title": "Salat al Isha",
+    "icon": "mosque",
+    "description": "Pause prière"
+  },
+  {
+    "id": "tl-4",
+    "time": "20:30",
+    "title": "Ouverture du Buffet",
+    "icon": "restaurant",
+    "description": "Dîner gastronomique & festivités"
+  },
+  {
+    "id": "tl-5",
+    "time": "22:00",
+    "title": "Célébration & Soirée",
+    "icon": "music_note",
+    "description": "Musique et moments inoubliables"
+  },
+  {
+    "id": "tl-6",
+    "time": "23:30",
+    "title": "Pièce Montée & Feux d'artifice",
+    "icon": "sparkles",
+    "description": "Spectacle féerique & gâteau des mariés"
+  }
+]

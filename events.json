@@ -1,0 +1,62 @@
+[
+  {
+    "id": "evt-1",
+    "title": "Le Nzoul",
+    "dateBadge": "9 Juillet 2026",
+    "time": "21h00",
+    "datetime": "2026-07-09T21:00:00",
+    "locationName": "Salle des Fêtes Motamarat Gremda",
+    "address": "Route Gremda 2.5km, Rte Gremda, Sfax",
+    "lat": 34.7645,
+    "lng": 10.7412,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Salle+des+F%C3%AAtes+Motamarat+Gremda+Route+Gremda+Sfax",
+    "description": "Une soirée traditionnelle magique pour célébrer le Nzoul entourés de nos proches.",
+    "icon": "wine_bar",
+    "isGold": false
+  },
+  {
+    "id": "evt-2",
+    "title": "Le Mariage & Réception",
+    "dateBadge": "12 Juillet 2026",
+    "time": "19h00",
+    "datetime": "2026-07-12T19:00",
+    "locationName": "Sousse, Tunisie",
+    "address": "Sousse, Tunisie",
+    "lat": 34.7305,
+    "lng": 10.7712,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hotel+Aurora+Sfax+Tunisia",
+    "description": "Grand diner de gala, ouverture du bal et soiree animee par Ahmed Rebai & Dali Triki.",
+    "icon": "favorite",
+    "isGold": true
+  },
+  {
+    "id": "evt-1787143725410",
+    "title": "Diner Intime",
+    "dateBadge": "25 Novembre 2026",
+    "time": "20h00",
+    "datetime": "2026-11-25T20:00:00",
+    "locationName": "Restaurant Le Cargo",
+    "address": "Zone Touristique, Sfax, Tunisie",
+    "lat": 34.74,
+    "lng": 10.78,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Le%20Cargo%20Zone%20Touristique%2C%20Sfax%2C%20Tunisie",
+    "description": "Diner intime de remerciement.",
+    "icon": "restaurant",
+    "isGold": false
+  },
+  {
+    "id": "evt-1787144060668",
+    "title": "Apres-Midi Special",
+    "dateBadge": "30 Novembre 2026",
+    "time": "15h00",
+    "datetime": "2026-11-30T15:00:00",
+    "locationName": "Cafe de la Plage",
+    "address": "Route de la Plage, Sfax",
+    "lat": 34.72,
+    "lng": 10.79,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Cafe%20de%20la%20Plage%20Route%20de%20la%20Plage%2C%20Sfax",
+    "description": "Cafe de l'apres-midi.",
+    "icon": "local_cafe",
+    "isGold": false
+  }
+]
