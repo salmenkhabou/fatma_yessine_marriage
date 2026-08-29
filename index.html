@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Main Stylesheet -->
-  <link href="style.css?v=4.0" rel="stylesheet" />
+  <link href="style.css?v=5.0" rel="stylesheet" />
+  <link href="scratch_styles.css?v=5.0" rel="stylesheet" />
 
   <!-- Standalone Opening & Audio Handlers -->
   <script>
@@ -150,9 +151,7 @@
 
   <!-- 1. WEBGENCY FULLSCREEN ENVELOPE OVERLAY -->
   <div id="weiOverlay" onclick="openTimelessInvitation()">
-    <img id="weiImg"
-      src="https://pub-96ce671efbac4dbfbc89b044c631a913.r2.dev/ChatGPT%20Image%20Jul%2027%2C%202026%2C%2001_02_07%20AM.png"
-      alt="Ouvrir votre invitation" draggable="false">
+    <img id="weiImg" src="envelope_yf.png?v=2" alt="Ouvrir votre invitation" draggable="false">
     <div id="weiTapWrap">
       <div class="wei-chevron"></div>
       <div id="weiTapLabel">Appuyez pour ouvrir</div>
@@ -212,7 +211,7 @@
       <h2 style="font-family: 'Great Vibes', 'Pinyon Script', cursive; font-size: 2.8rem; color: #806B43; margin-bottom: 0.2rem;">
         The Date
       </h2>
-      <div class="gold-ornament-divider"><span class="gold-ornament-symbol">✦ Grattez pour révéler la date ✦</span></div>
+      <div class="gold-ornament-divider"><span class="gold-ornament-symbol">✦ Pour révéler la date ✦</span></div>
 
       <div class="scratch-3cards-row">
         <!-- DAY -->
@@ -282,12 +281,13 @@
     </section>
 
     <!-- 7. SPIRITUAL QUOTE / SOURATE AN-NABA -->
-    <section class="quran-quote-card reveal-card">
+    <section class="quran-quote-card reveal-card" style="text-align: center; padding: 2.5rem 1.25rem;">
+      <h3 class="arabic-quran-verse">وَخَلَقْنَاكُمْ أَزْوَاجًا</h3>
       <p class="quran-verse-text">
         "Et Nous vous avons créés en couples."
       </p>
       <p class="quran-verse-ref">(Sourate An-Naba 78:8)</p>
-      <div class="gold-ornament-divider" style="margin-top: 1rem;"><span class="gold-ornament-symbol">✧ ✦ ✧</span></div>
+      <div class="gold-ornament-divider" style="margin-top: 1.25rem;"><span class="gold-ornament-symbol">✧ ✦ ✧</span></div>
     </section>
 
     <!-- 8. LIVE COUNTDOWN TIMER ("THE CELEBRATION BEGINS") -->
@@ -297,23 +297,23 @@
       </h3>
       <div class="gold-ornament-divider"><span class="gold-ornament-symbol">✧ ✦ ✧</span></div>
 
-      <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; max-width: 320px; margin: 1rem auto;">
-        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+      <div class="countdown-row-container" style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; max-width: 320px; margin: 1rem auto;">
+        <div class="timer-digit-box" style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.35rem; text-align: center;">
           <span id="timer-days" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
           <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Jours</span>
         </div>
         <span style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-dark); font-weight: 700;">:</span>
-        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+        <div class="timer-digit-box" style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.35rem; text-align: center;">
           <span id="timer-hours" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
           <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Heures</span>
         </div>
         <span style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-dark); font-weight: 700;">:</span>
-        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+        <div class="timer-digit-box" style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.35rem; text-align: center;">
           <span id="timer-minutes" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
           <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Min</span>
         </div>
         <span style="font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold-dark); font-weight: 700;">:</span>
-        <div style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.5rem;">
+        <div class="timer-digit-box" style="flex: 1; background: var(--cream-bg); border: 1px solid var(--gold-light); border-radius: 12px; padding: 0.75rem 0.35rem; text-align: center;">
           <span id="timer-seconds" style="font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold-dark); display: block;">00</span>
           <span style="font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #777;">Sec</span>
         </div>
@@ -323,68 +323,29 @@
       <img src="flower_side.png" class="side-floral-right" alt="" />
     </section>
 
-    <!-- 9. GOLDEN VERTICAL TIMELINE -->
-    <section class="quran-quote-card reveal-card" style="padding: 2.5rem 1.25rem;">
-      <h3 style="font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: #806B43; text-align: center; margin-bottom: 0.2rem;">
-        Wedding Timeline
-      </h3>
-      <div style="text-align: center; color: #CFAB66; margin-bottom: 2rem;">✧ ✦ ✧</div>
+    <!-- 9. LUXURY EVENT TIMELINE SECTION -->
+    <section id="wedding-timeline-section" class="wedding-timeline-card reveal-card">
+      <div class="wedding-timeline-header">
+        <h2 class="wedding-timeline-title">Event Timeline</h2>
+        <div class="gold-flourish-divider">
+          <svg class="gold-flourish-svg" viewBox="0 0 240 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="12" x2="95" y2="12" stroke="#CFAB66" stroke-width="1.2"/>
+            <path d="M100 12 C105 5, 110 5, 120 12 C130 19, 135 19, 140 12 C135 5, 130 5, 120 12 C110 19, 105 19, 100 12 Z" fill="#806B43" stroke="#CFAB66" stroke-width="0.8"/>
+            <circle cx="120" cy="12" r="2.5" fill="#FDF4EB"/>
+            <line x1="145" y1="12" x2="230" y2="12" stroke="#CFAB66" stroke-width="1.2"/>
+          </svg>
+        </div>
+      </div>
 
-      <div id="wedding-timeline-container" class="timeless-vertical-timeline">
-        <!-- Rendered dynamically via /api/timeline -->
-        <div class="timeline-row-item">
-          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
-            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">local_bar</span>
-          </div>
-          <div class="timeline-node-marker"></div>
-          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
-            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">18:00</span>
-            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Accueil & Rafraîchissements</span>
+      <div class="luxury-timeline-wrapper">
+        <div class="timeline-center-line">
+          <div class="timeline-top-finial">
+            <span class="finial-diamond">◆</span>
           </div>
         </div>
 
-        <div class="timeline-row-item">
-          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
-            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">18:30</span>
-            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Entrée des Mariés</span>
-          </div>
-          <div class="timeline-node-marker"></div>
-          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
-            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">favorite</span>
-          </div>
-        </div>
-
-        <div class="timeline-row-item">
-          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
-            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">mosque</span>
-          </div>
-          <div class="timeline-node-marker"></div>
-          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
-            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">19:30</span>
-            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Salat al Isha</span>
-          </div>
-        </div>
-
-        <div class="timeline-row-item">
-          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
-            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">20:30</span>
-            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Ouverture du Buffet</span>
-          </div>
-          <div class="timeline-node-marker"></div>
-          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
-            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">restaurant</span>
-          </div>
-        </div>
-
-        <div class="timeline-row-item">
-          <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
-            <span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">music_note</span>
-          </div>
-          <div class="timeline-node-marker"></div>
-          <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
-            <span style="font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; color: #806B43; display: block;">22:00</span>
-            <span style="font-family: 'Rufina', serif; font-size: 0.95rem; color: #382E25;">Célébration & Soirée</span>
-          </div>
+        <div id="luxury-timeline-items" class="luxury-timeline-list">
+          <!-- Rendered dynamically by app.js -->
         </div>
       </div>
     </section>
@@ -398,9 +359,7 @@
         Carte interactive des lieux — Sfax, Tunisie
       </p>
 
-      <div id="inline-map" style="height: 320px; width: 100%; border-radius: 16px; border: 1.5px solid var(--gold-light); overflow: hidden; margin-bottom: 1.25rem; z-index: 1;"></div>
-
-      <div id="inline-venues-grid" style="display: flex; flex-direction: column; gap: 0.85rem;"></div>
+      <div id="inline-map" style="height: 320px; width: 100%; border-radius: 16px; border: 1.5px solid var(--gold-light); overflow: hidden; z-index: 1;"></div>
     </section>
 
     <!-- 10. DRESS CODE & RECOMMENDATIONS -->
@@ -645,7 +604,7 @@
   </div>
 
   <!-- Main Script -->
-  <script src="app.js?v=2.0"></script>
+  <script src="app.js?v=5.0"></script>
   <!-- Leaflet Map JS (Loaded asynchronously) -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" async></script>
 </body>

@@ -3298,6 +3298,17 @@ body {
   letter-spacing: 0.08em;
 }
 
+.scratch-canvas-wrap-small canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+  touch-action: none;
+}
+
 .scratch-card-label {
   font-family: 'Cinzel', serif;
   font-size: 0.62rem;
@@ -3313,12 +3324,20 @@ body {
   background: #FDF4EB;
   border: 2px solid #CFAB66;
   border-radius: 150px 150px 24px 24px;
-  padding: 3.5rem 1.75rem 3rem;
+  padding: 3.5rem 1.75rem 4.75rem;
   text-align: center;
   box-shadow: 0 15px 45px rgba(128, 107, 67, 0.12), inset 0 0 25px rgba(207, 171, 102, 0.15);
   margin: 2.5rem auto;
   max-width: 420px;
   overflow: hidden;
+}
+
+.arch-invitation-card > p,
+.arch-invitation-card > h2,
+.arch-invitation-card > img:not(.floral-corner-img),
+.arch-invitation-card > div {
+  position: relative;
+  z-index: 2;
 }
 
 .arch-invitation-card::before {
@@ -3361,23 +3380,24 @@ body {
 /* Ivory & Gold Luxury Floral Corner Accents */
 .floral-corner-img {
   position: absolute;
-  width: 125px;
+  width: 90px;
   height: auto;
   pointer-events: none;
-  z-index: 10;
-  filter: drop-shadow(0 6px 15px rgba(128, 107, 67, 0.18));
+  z-index: 1;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 10px rgba(128, 107, 67, 0.15));
   transition: transform 0.5s ease;
 }
 
 .floral-corner-bl {
-  bottom: -15px;
-  left: -15px;
+  bottom: -8px;
+  left: -8px;
   animation: floralSwayBL 7s infinite ease-in-out alternate;
 }
 
 .floral-corner-br {
-  bottom: -15px;
-  right: -15px;
+  bottom: -8px;
+  right: -8px;
   transform: scaleX(-1);
   animation: floralSwayBR 7.5s infinite ease-in-out alternate;
 }
@@ -3444,15 +3464,15 @@ body {
 .timeless-vertical-timeline {
   position: relative;
   padding: 2.5rem 0;
-  max-width: 420px;
-  margin: 2rem auto;
+  max-width: 480px;
+  margin: 1.5rem auto;
 }
 
 .timeless-vertical-timeline::before {
   content: '';
   position: absolute;
-  top: 60px;
-  bottom: 60px;
+  top: 40px;
+  bottom: 40px;
   left: 50%;
   width: 2px;
   background: linear-gradient(180deg, transparent, #CFAB66 15%, #CFAB66 85%, transparent);
@@ -3463,7 +3483,185 @@ body {
   display: flex;
   align-items: center;
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
+  width: 100%;
+}
+
+.timeline-col-side {
+  flex: 1;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.timeline-col-left {
+  padding-right: 1.25rem;
+  text-align: right;
+}
+
+.timeline-col-right {
+  padding-left: 1.25rem;
+  text-align: left;
+}
+
+.timeline-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--cream-bg, #FDF4EB);
+  border: 1.5px solid var(--gold, #CFAB66);
+  box-shadow: 0 4px 12px rgba(128, 107, 67, 0.15);
+}
+
+.timeline-col-left .timeline-icon-box {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.timeline-col-right .timeline-icon-box {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.timeline-icon-box span {
+  font-size: 1.5rem;
+  color: var(--gold-dark, #806B43);
+}
+
+.timeline-event-card {
+  background: #ffffff;
+  border: 1.5px solid var(--gold-light, #E6D7C3);
+  border-radius: 14px;
+  padding: 0.95rem 1rem;
+  box-shadow: 0 6px 18px rgba(128, 107, 67, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  text-align: left;
+}
+
+.timeline-col-left .timeline-event-card {
+  text-align: right;
+}
+
+.timeline-event-card.gold-event-card {
+  border-color: var(--gold, #CFAB66);
+  background: linear-gradient(135deg, #ffffff 0%, #FDF4EB 100%);
+  box-shadow: 0 8px 22px rgba(207, 171, 102, 0.2);
+}
+
+.timeline-event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(128, 107, 67, 0.15);
+}
+
+.timeline-date-chip {
+  display: inline-block;
+  font-family: var(--font-title), 'Cinzel', serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold-dark, #806B43);
+  text-transform: uppercase;
+  background: rgba(207, 171, 102, 0.14);
+  padding: 0.22rem 0.6rem;
+  border-radius: 20px;
+  margin-bottom: 0.35rem;
+}
+
+.timeline-event-title {
+  font-family: var(--font-serif), 'Rufina', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--charcoal, #382E25);
+  line-height: 1.25;
+  margin-bottom: 0.35rem;
+}
+
+.timeline-location-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  font-family: var(--font-sans), 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: #555;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.timeline-col-left .timeline-location-text {
+  justify-content: flex-end;
+}
+
+.timeline-location-text .material-symbols-outlined {
+  font-size: 1rem;
+  color: var(--gold-dark, #806B43);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.timeline-event-desc {
+  font-family: var(--font-serif), 'Rufina', serif;
+  font-style: italic;
+  font-size: 0.7rem;
+  color: #666;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-card-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.timeline-col-left .timeline-card-actions {
+  justify-content: flex-end;
+}
+
+.btn-timeline-map {
+  font-family: var(--font-sans), 'Montserrat', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.38rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid var(--gold, #CFAB66);
+}
+
+.btn-timeline-map .material-symbols-outlined {
+  font-size: 0.85rem;
+}
+
+.btn-position-map {
+  background-color: var(--charcoal, #382E25);
+  color: #ffffff;
+  border-color: var(--charcoal, #382E25);
+}
+
+.btn-position-map:hover {
+  background-color: var(--gold-dark, #806B43);
+  border-color: var(--gold-dark, #806B43);
+  box-shadow: 0 4px 10px rgba(128, 107, 67, 0.3);
+}
+
+.btn-google-map {
+  background-color: #ffffff;
+  color: var(--gold-dark, #806B43);
+}
+
+.btn-google-map:hover {
+  background-color: var(--gold-light, #E6D7C3);
+  color: var(--charcoal, #382E25);
 }
 
 .timeline-node-marker {
@@ -3483,12 +3681,29 @@ body {
   box-shadow: 0 0 10px rgba(207, 171, 102, 0.4);
 }
 
+.timeline-node-marker.gold-node {
+  border-color: #d4af37;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+}
+
 .timeline-node-marker::after {
   content: '';
   width: 8px;
   height: 8px;
   background: #806B43;
   border-radius: 50%;
+}
+
+.arabic-quran-verse {
+  font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--gold-dark, #806B43);
+  direction: rtl;
+  margin-bottom: 0.85rem;
+  line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(207, 171, 102, 0.25);
+  animation: goldShimmer 5s infinite ease-in-out;
 }
 
 .quran-verse-text {
@@ -3499,12 +3714,199 @@ body {
   margin-bottom: 0.75rem;
 }
 
-.quran-verse-ref {
-  font-family: var(--font-title), 'Cinzel', serif;
+/* Luxury Wedding Timeline Card Section */
+.wedding-timeline-card {
+  position: relative;
+  background: #FDF4EB;
+  border: 1.5px solid #E6D7C3;
+  border-radius: 28px;
+  padding: 3rem 1.25rem 3.5rem;
+  max-width: 480px;
+  margin: 2.5rem auto;
+  box-shadow: 0 15px 40px rgba(128, 107, 67, 0.08);
+  box-sizing: border-box;
+}
+
+.wedding-timeline-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.wedding-timeline-title {
+  font-family: 'Great Vibes', 'Pinyon Script', cursive;
+  font-size: 3.4rem;
+  color: #806B43;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+  font-weight: 400;
+}
+
+.gold-flourish-divider {
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto;
+  height: 24px;
+}
+
+.gold-flourish-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.luxury-timeline-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+  box-sizing: border-box;
+}
+
+.timeline-center-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: linear-gradient(180deg, #CFAB66 0%, #806B43 50%, #CFAB66 100%);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.timeline-top-finial {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #806B43;
   font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  color: #888;
-  text-transform: uppercase;
+  line-height: 1;
+}
+
+.luxury-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.luxury-timeline-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  min-height: 110px;
+}
+
+.timeline-col-side {
+  flex: 1;
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-col-left {
+  padding-right: 1.5rem;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.timeline-col-right {
+  padding-left: 1.5rem;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.timeline-center-node {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+
+.node-diamond-badge {
+  width: 13px;
+  height: 13px;
+  background: #FDF4EB;
+  border: 1.5px solid #806B43;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(207, 171, 102, 0.4);
+}
+
+.node-diamond-badge::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: #806B43;
+  border-radius: 50%;
+}
+
+.node-flower-badge {
+  width: 26px;
+  height: 26px;
+  background: #FDF4EB;
+  border: 1px solid #CFAB66;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(207, 171, 102, 0.35);
+  font-size: 0.75rem;
+  color: #806B43;
+}
+
+.timeline-time-text {
+  font-family: 'Great Vibes', 'Pinyon Script', cursive;
+  font-size: 2.3rem;
+  color: #806B43;
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+}
+
+.timeline-title-text {
+  font-family: 'Cinzel', 'Rufina', serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #382E25;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+}
+
+.timeline-desc-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  color: #666;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.timeline-art-illustration {
+  width: 100px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 10px rgba(128, 107, 67, 0.15));
+  transition: transform 0.4s ease;
+}
+
+.timeline-art-illustration:hover {
+  transform: scale(1.05);
+}
+
+.timeline-art-svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* Dress Code Palette Cards */
@@ -3560,4 +3962,227 @@ body {
   padding: 0.85rem 1rem;
   margin-top: 1rem;
 }
+
+/* ==========================================================================
+   Comprehensive Mobile Responsiveness & Phone Layout Optimization
+   ========================================================================== */
+
+/* Global Viewport & Container Responsiveness */
+html, body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+#main-content {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+/* Modals Mobile Scroll & Dynamic Sizing */
+.modal-overlay {
+  padding: 0.75rem !important;
+}
+
+.modal-container {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.75rem 1.25rem !important;
+  width: 100% !important;
+  margin: auto !important;
+}
+
+/* Responsive Media Queries for Mobile Screens (<= 520px) */
+@media screen and (max-width: 520px) {
+  /* Envelope Overlay Image */
+  #weiImg {
+    width: 95% !important;
+    max-width: 360px !important;
+  }
+
+  /* Hero Section */
+  .timeless-hero-container {
+    min-height: 75vh !important;
+    padding: 2rem 1rem 1.5rem !important;
+    border-radius: 0 0 18px 18px !important;
+  }
+
+  .hero-monogram-gold {
+    width: 80px !important;
+    height: 80px !important;
+    font-size: 2.75rem !important;
+  }
+
+  .hero-names-title {
+    font-size: 1.75rem !important;
+    letter-spacing: 0.08em !important;
+    margin: 1rem 0 0.35rem !important;
+  }
+
+  /* Scratch 3-Card Date Section */
+  .scratch-card-box {
+    padding: 1.5rem 0.75rem !important;
+    margin: 1rem auto !important;
+    border-radius: 16px !important;
+  }
+
+  .scratch-3cards-row {
+    gap: 6px !important;
+    margin: 1rem 0 !important;
+  }
+
+  .scratch-card-col {
+    max-width: 100px !important;
+  }
+
+  .scratch-canvas-wrap-small {
+    height: auto !important;
+    aspect-ratio: 105 / 110 !important;
+  }
+
+  .scratch-canvas-wrap-small canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .scratch-under-small {
+    font-size: 1rem !important;
+  }
+
+  .scratch-under-small.scratch-month-font {
+    font-size: 0.7rem !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .scratch-card-label {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.15em !important;
+  }
+
+  /* Islamic Arch Invitation Card */
+  .arch-invitation-card {
+    border-radius: 110px 110px 20px 20px !important;
+    padding: 2.75rem 1rem 3.75rem !important;
+    margin: 1.75rem auto !important;
+  }
+
+  .arch-invitation-card::before {
+    border-radius: 103px 103px 14px 14px !important;
+  }
+
+  .arch-invitation-card::after {
+    border-radius: 98px 98px 10px 10px !important;
+  }
+
+  .arch-names-title {
+    font-size: 2.5rem !important;
+  }
+
+  /* Quran Quote & Typography */
+  .quran-verse-text {
+    font-size: 1.75rem !important;
+  }
+
+  .gold-ornament-divider::before,
+  .gold-ornament-divider::after {
+    width: 45px !important;
+  }
+
+  /* Live Countdown Timer Flex Grid */
+  .countdown-row-container {
+    gap: 0.4rem !important;
+  }
+
+  .timer-digit-box span:first-child {
+    font-size: 1.4rem !important;
+  }
+
+  /* Side & Corner Floral Accents Overflow Protection */
+  .side-floral-left {
+    left: -12px !important;
+    width: 85px !important;
+  }
+
+  .side-floral-right {
+    right: -12px !important;
+    width: 85px !important;
+  }
+
+  .hero-floral-left,
+  .hero-floral-right {
+    width: 100px !important;
+  }
+
+  .floral-corner-img {
+    width: 90px !important;
+  }
+
+  /* Timeline */
+  .timeless-vertical-timeline {
+    padding: 1.5rem 0 !important;
+    margin: 1rem auto !important;
+  }
+
+  .timeline-row-item {
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Action Buttons & Swatches */
+  .swatch-grid {
+    gap: 8px !important;
+  }
+
+  .swatch-circle {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Floating Audio Toggle Button */
+  #weiAudioBtn {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  #weiAudioBtn svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* Ultra-small Mobiles (<= 375px e.g. iPhone SE, small Androids) */
+@media screen and (max-width: 375px) {
+  .hero-names-title {
+    font-size: 1.5rem !important;
+  }
+
+  .arch-names-title {
+    font-size: 2.2rem !important;
+  }
+
+  .scratch-3cards-row {
+    gap: 4px !important;
+  }
+
+  .scratch-under-small {
+    font-size: 0.9rem !important;
+  }
+
+  .scratch-under-small.scratch-month-font {
+    font-size: 0.62rem !important;
+  }
+
+  .gold-ornament-divider::before,
+  .gold-ornament-divider::after {
+    width: 30px !important;
+  }
+
+  .timer-digit-box span:first-child {
+    font-size: 1.25rem !important;
+  }
+}
+
 

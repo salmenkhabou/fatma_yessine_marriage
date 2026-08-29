@@ -23,6 +23,59 @@
   object-fit: contain;
 }
 
+/* 3D Pearl Gold Wax Seal Monogram Y & F Overlay */
+#weiWaxMonogram {
+  position: absolute;
+  top: 51.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFFDF8 0%, #F7EDE0 35%, #EBE0CE 65%, #D4BE9B 88%, #B39B78 100%);
+  box-shadow: 
+    inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.95), 
+    inset -2.5px -2.5px 5px rgba(80, 60, 30, 0.3), 
+    0 8px 20px rgba(50, 40, 25, 0.22);
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font-family: 'Great Vibes', 'Pinyon Script', cursive;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#weiWaxMonogram::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 130, 80, 0.35);
+}
+
+#weiWaxMonogram .wax-letter {
+  font-size: 2.3rem;
+  line-height: 1;
+  color: #7A5F32;
+  font-weight: 700;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.85), -1px -1px 1px rgba(60, 45, 20, 0.4);
+  position: relative;
+  z-index: 2;
+}
+
+#weiWaxMonogram .wax-ampersand {
+  font-size: 1.2rem;
+  font-family: 'Cinzel', serif;
+  color: #9C7D46;
+  margin: 0 1px;
+  font-weight: 600;
+  text-shadow: 0.5px 0.5px 0px rgba(255, 255, 255, 0.7);
+  position: relative;
+  z-index: 2;
+}
+
 #weiTapWrap {
   position: absolute;
   bottom: 30%;

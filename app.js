@@ -201,13 +201,195 @@ function initApp() {
       .then(res => res.json())
       .then(events => {
         fetchedEvents = events || [];
-        renderSerpentineRoadmap(fetchedEvents);
+        renderLuxuryTimeline(fetchedEvents);
         renderVenuesGrid(fetchedEvents);
         initOrUpdatePublicMap();
       })
       .catch(err => {
         console.error("Error loading events:", err);
+        renderLuxuryTimeline([]);
       });
+  }
+
+  function renderLuxuryTimeline(events) {
+    const listContainer = document.getElementById('luxury-timeline-items');
+    if (!listContainer) return;
+
+    // Default timeline presets matching the user's golden luxury timeline design
+    const defaultTimeline = [
+      {
+        time: "6:00 pm",
+        title: "Guest Arrival and Welcome Drinks",
+        desc: "Accueil & Rafraîchissements pour les invités",
+        art: 'arch-doors'
+      },
+      {
+        time: "6:30 pm",
+        title: "Bride Entrance",
+        desc: "Entrée féerique de la Mariée",
+        art: 'bride-gown'
+      },
+      {
+        time: "7:30 pm",
+        title: "Salat al Isha",
+        desc: "Pause prière",
+        art: 'mosque-arch'
+      },
+      {
+        time: "8:30 pm",
+        title: "Dinner & Festivities",
+        desc: "Ouverture du Buffet & Dîner",
+        art: 'feast-dome'
+      },
+      {
+        time: "10:00 pm",
+        title: "Celebration & Party",
+        desc: "Musique & Célébration",
+        art: 'music-harp'
+      },
+      {
+        time: "11:30 pm",
+        title: "Cake & Fireworks",
+        desc: "Pièce Montée & Feux d'artifice",
+        art: 'wedding-cake'
+      }
+    ];
+
+    const dataToRender = (events && events.length > 0) ? events.map((e, idx) => {
+      let timeStr = e.time || '';
+      if (timeStr === '18:00') timeStr = '6:00 pm';
+      if (timeStr === '18:30') timeStr = '6:30 pm';
+      if (timeStr === '19:30') timeStr = '7:30 pm';
+      if (timeStr === '20:30') timeStr = '8:30 pm';
+      if (timeStr === '22:00') timeStr = '10:00 pm';
+      if (timeStr === '23:30') timeStr = '11:30 pm';
+
+      const artKeys = ['arch-doors', 'bride-gown', 'mosque-arch', 'feast-dome', 'music-harp', 'wedding-cake'];
+      return {
+        time: timeStr,
+        title: e.title || '',
+        desc: e.description || '',
+        art: artKeys[idx % artKeys.length]
+      };
+    }) : defaultTimeline;
+
+    function getArtSvg(artType) {
+      if (artType === 'arch-doors') {
+        return `<svg class="timeline-art-svg" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 120 V 45 C 25 20, 95 20, 95 45 V 120" stroke="#806B43" stroke-width="2.5" fill="none"/>
+          <path d="M32 120 V 48 C 32 28, 88 28, 88 48 V 120" stroke="#CFAB66" stroke-width="1.2" fill="none"/>
+          <path d="M60 25 V 120" stroke="#CFAB66" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <path d="M40 55 C 50 45, 70 45, 80 55" stroke="#806B43" stroke-width="1.5" fill="none"/>
+          <circle cx="53" cy="75" r="3.5" stroke="#806B43" stroke-width="1.2"/>
+          <circle cx="67" cy="75" r="3.5" stroke="#806B43" stroke-width="1.2"/>
+          <circle cx="25" cy="115" r="7" fill="#FDF4EB" stroke="#806B43" stroke-width="1.5"/>
+          <circle cx="95" cy="115" r="7" fill="#FDF4EB" stroke="#806B43" stroke-width="1.5"/>
+          <circle cx="25" cy="115" r="3" fill="#D4AF37"/>
+          <circle cx="95" cy="115" r="3" fill="#D4AF37"/>
+        </svg>`;
+      }
+      if (artType === 'bride-gown') {
+        return `<svg class="timeline-art-svg" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="65" rx="42" ry="52" stroke="#CFAB66" stroke-width="1.5" fill="none"/>
+          <circle cx="60" cy="36" r="5" stroke="#806B43" stroke-width="1.5" fill="#FDF4EB"/>
+          <path d="M60 36 C 45 42, 40 70, 35 95" stroke="#D4AF37" stroke-width="1.2" stroke-dasharray="2 2" fill="none"/>
+          <path d="M60 36 C 75 42, 80 70, 85 95" stroke="#D4AF37" stroke-width="1.2" stroke-dasharray="2 2" fill="none"/>
+          <path d="M56 42 L 53 58 L 35 105 L 85 105 L 67 58 L 64 42 Z" stroke="#806B43" stroke-width="1.5" fill="none"/>
+          <circle cx="35" cy="100" r="6" fill="#FDF4EB" stroke="#806B43" stroke-width="1.2"/>
+          <circle cx="85" cy="100" r="6" fill="#FDF4EB" stroke="#806B43" stroke-width="1.2"/>
+          <circle cx="60" cy="108" r="8" fill="#FDF4EB" stroke="#806B43" stroke-width="1.5"/>
+          <circle cx="60" cy="108" r="3.5" fill="#D4AF37"/>
+        </svg>`;
+      }
+      if (artType === 'mosque-arch') {
+        return `<svg class="timeline-art-svg" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 120 V 48 C 22 25, 60 15, 60 15 C 60 15, 98 25, 98 48 V 120" stroke="#806B43" stroke-width="2" fill="none"/>
+          <path d="M28 120 V 50 C 28 30, 60 22, 60 22 C 60 22, 92 30, 92 50 V 120" stroke="#CFAB66" stroke-width="1" fill="none"/>
+          <path d="M60 28 C 57 28, 55 31, 57 34 C 59 34, 62 32, 60 28 Z" fill="#D4AF37"/>
+          <line x1="60" y1="34" x2="60" y2="44" stroke="#806B43" stroke-width="1"/>
+          <polygon points="60,44 56,52 64,52" stroke="#806B43" fill="#FDF4EB" stroke-width="1"/>
+          <path d="M40 115 L 45 80 C 45 72, 75 72, 75 80 L 80 115 Z" stroke="#806B43" stroke-width="1.5" fill="none"/>
+          <circle cx="22" cy="115" r="6" fill="#FDF4EB" stroke="#806B43" stroke-width="1.2"/>
+          <circle cx="98" cy="115" r="6" fill="#FDF4EB" stroke="#806B43" stroke-width="1.2"/>
+        </svg>`;
+      }
+      if (artType === 'feast-dome') {
+        return `<svg class="timeline-art-svg" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="65" rx="42" ry="52" stroke="#CFAB66" stroke-width="1.5" fill="none"/>
+          <path d="M35 85 C 35 55, 85 55, 85 85 Z" stroke="#806B43" stroke-width="2" fill="none"/>
+          <line x1="30" y1="87" x2="90" y2="87" stroke="#806B43" stroke-width="2.5"/>
+          <circle cx="60" cy="52" r="4" fill="#D4AF37" stroke="#806B43" stroke-width="1"/>
+          <circle cx="60" cy="108" r="7" fill="#FDF4EB" stroke="#806B43" stroke-width="1.5"/>
+          <circle cx="60" cy="108" r="3" fill="#D4AF37"/>
+        </svg>`;
+      }
+      if (artType === 'music-harp') {
+        return `<svg class="timeline-art-svg" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 120 V 45 C 25 20, 95 20, 95 45 V 120" stroke="#806B43" stroke-width="2" fill="none"/>
+          <path d="M42 95 C 42 55, 75 45, 80 40 V 95 Z" stroke="#CFAB66" stroke-width="1.5" fill="none"/>
+          <line x1="50" y1="95" x2="50" y2="58" stroke="#806B43" stroke-width="1"/>
+          <line x1="58" y1="95" x2="58" y2="52" stroke="#806B43" stroke-width="1"/>
+          <line x1="66" y1="95" x2="66" y2="47" stroke="#806B43" stroke-width="1"/>
+          <circle cx="35" cy="38" r="3" fill="#806B43"/>
+          <circle cx="85" cy="35" r="3" fill="#806B43"/>
+        </svg>`;
+      }
+      return `<svg class="timeline-art-svg" viewBox="0 0 120 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="65" rx="42" ry="52" stroke="#CFAB66" stroke-width="1.5" fill="none"/>
+        <rect x="42" y="80" width="36" height="22" rx="3" stroke="#806B43" stroke-width="1.8" fill="#FDF4EB"/>
+        <rect x="48" y="62" width="24" height="18" rx="2" stroke="#806B43" stroke-width="1.5" fill="#FDF4EB"/>
+        <rect x="53" y="48" width="14" height="14" rx="2" stroke="#806B43" stroke-width="1.2" fill="#FDF4EB"/>
+        <path d="M60 45 C 57 40, 52 42, 57 47 L 60 50 L 63 47 C 68 42, 63 40, 60 45 Z" fill="#D4AF37"/>
+        <circle cx="60" cy="110" r="7" fill="#FDF4EB" stroke="#806B43" stroke-width="1.5"/>
+        <circle cx="60" cy="110" r="3" fill="#D4AF37"/>
+      </svg>`;
+    }
+
+    listContainer.innerHTML = dataToRender.map((item, idx) => {
+      const isEven = idx % 2 === 0;
+      const svgArt = getArtSvg(item.art);
+      const nodeBadge = isEven
+        ? `<div class="node-diamond-badge"></div>`
+        : `<div class="node-flower-badge">🌸</div>`;
+
+      if (isEven) {
+        return `
+          <div class="luxury-timeline-row">
+            <div class="timeline-col-side timeline-col-left">
+              <div class="timeline-art-illustration">
+                ${svgArt}
+              </div>
+            </div>
+            <div class="timeline-center-node">
+              ${nodeBadge}
+            </div>
+            <div class="timeline-col-side timeline-col-right">
+              <div class="timeline-time-text">${escapeHtml(item.time)}</div>
+              <div class="timeline-title-text">${escapeHtml(item.title)}</div>
+              ${item.desc ? `<div class="timeline-desc-text">${escapeHtml(item.desc)}</div>` : ''}
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="luxury-timeline-row">
+            <div class="timeline-col-side timeline-col-left">
+              <div class="timeline-time-text">${escapeHtml(item.time)}</div>
+              <div class="timeline-title-text">${escapeHtml(item.title)}</div>
+              ${item.desc ? `<div class="timeline-desc-text">${escapeHtml(item.desc)}</div>` : ''}
+            </div>
+            <div class="timeline-center-node">
+              ${nodeBadge}
+            </div>
+            <div class="timeline-col-side timeline-col-right">
+              <div class="timeline-art-illustration">
+                ${svgArt}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }).join('');
   }
 
   function renderSerpentineRoadmap(events) {
@@ -286,9 +468,14 @@ function initApp() {
               </p>
               ${evt.address ? `<p class="polaroid-address-sub">${escapeHtml(evt.address)}</p>` : ''}
               ${evt.description ? `<p class="polaroid-description">"${escapeHtml(evt.description)}"</p>` : ''}
-              <div class="polaroid-footer-action">
+              <div class="polaroid-footer-action" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                ${evt.lat && evt.lng ? `
+                  <button type="button" class="btn-luxury btn-gold btn-xs" onclick="event.stopPropagation(); focusEventOnMap(${evt.lat}, ${evt.lng}, '${escapeJs(evt.title)}', '${escapeJs(evt.locationName)}');">
+                    <span class="material-symbols-outlined">map</span> Position Carte
+                  </button>
+                ` : ''}
                 <a href="${evt.googleMapsUrl || '#'}" target="_blank" rel="noopener" class="btn-luxury btn-gold-outline btn-xs" onclick="event.stopPropagation();">
-                  <span class="material-symbols-outlined">navigation</span> Carte & Itinéraire
+                  <span class="material-symbols-outlined">navigation</span> Google Maps
                 </a>
               </div>
             </div>
@@ -697,12 +884,12 @@ function initApp() {
         'onStateChange': function(event) {
           if (event.data === YT.PlayerState.PLAYING) {
             isPlaying = true;
-            musicIcon.textContent = 'pause';
-            musicToggle.classList.add('audio-playing');
+            if (musicIcon) musicIcon.textContent = 'pause';
+            if (musicToggle) musicToggle.classList.add('audio-playing');
           } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
             isPlaying = false;
-            musicIcon.textContent = 'music_note';
-            musicToggle.classList.remove('audio-playing');
+            if (musicIcon) musicIcon.textContent = 'music_note';
+            if (musicToggle) musicToggle.classList.remove('audio-playing');
           }
         }
       }
@@ -713,14 +900,14 @@ function initApp() {
     if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
       ytPlayer.playVideo();
       isPlaying = true;
-      musicIcon.textContent = 'pause';
-      musicToggle.classList.add('audio-playing');
+      if (musicIcon) musicIcon.textContent = 'pause';
+      if (musicToggle) musicToggle.classList.add('audio-playing');
     } else if (bgMusic) {
       bgMusic.play()
         .then(() => {
           isPlaying = true;
-          musicIcon.textContent = 'pause';
-          musicToggle.classList.add('audio-playing');
+          if (musicIcon) musicIcon.textContent = 'pause';
+          if (musicToggle) musicToggle.classList.add('audio-playing');
         })
         .catch(err => console.log("Autoplay music blocked: ", err));
     }
@@ -734,14 +921,16 @@ function initApp() {
         bgMusic.pause();
       }
       isPlaying = false;
-      musicIcon.textContent = 'music_note';
-      musicToggle.classList.remove('audio-playing');
+      if (musicIcon) musicIcon.textContent = 'music_note';
+      if (musicToggle) musicToggle.classList.remove('audio-playing');
     } else {
       playMusic();
     }
   }
   
-  musicToggle.addEventListener('click', toggleMusic);
+  if (musicToggle) {
+    musicToggle.addEventListener('click', toggleMusic);
+  }
 
   // ==========================================================================
   // 8. Modals Overlay Controller
@@ -1134,60 +1323,211 @@ function initApp() {
     weiOverlay.addEventListener('touchstart', window.openTimelessInvitation, { passive: true });
   }
 
-  // HTML5 3-Card Scratch Reveal Engine
+  // HTML5 3-Card Scratch Reveal Engine (Mouse & Touch Swipe Wiping)
   function setupScratchCard(canvasId, textLabel) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    
+    let isRevealed = false;
+    let w = 105;
+    let h = 110;
 
-    function initFoil() {
-      ctx.fillStyle = '#CFAB66';
+    function resizeAndInitFoil() {
+      if (isRevealed) return;
+      const rect = canvas.getBoundingClientRect();
+      w = Math.max(105, Math.floor(rect.width || 105));
+      h = Math.max(110, Math.floor(rect.height || 110));
+      
+      canvas.width = w;
+      canvas.height = h;
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, w, h);
+
+      // Metallic luxury gold gradient foil background
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, '#D4AF37');
+      grad.addColorStop(0.25, '#F5E5C0');
+      grad.addColorStop(0.5, '#CFAB66');
+      grad.addColorStop(0.75, '#B59148');
+      grad.addColorStop(1, '#806B43');
+      ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
 
-      for (let i = 0; i < 200; i++) {
+      // Sparkling gold particles pattern
+      for (let i = 0; i < 180; i++) {
         const x = Math.random() * w;
         const y = Math.random() * h;
         const radius = Math.random() * 1.5;
-        ctx.fillStyle = Math.random() > 0.5 ? '#FAF8F5' : '#806B43';
+        ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.85)' : 'rgba(92, 74, 40, 0.6)';
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2);
         ctx.fill();
       }
 
+      // Elegant inner border line
       ctx.strokeStyle = '#806B43';
       ctx.lineWidth = 1.5;
-      ctx.strokeRect(3, 3, w - 6, h - 6);
-
-      ctx.font = "bold 9px 'Cinzel', serif";
-      ctx.fillStyle = '#382E25';
-      ctx.textAlign = 'center';
-      ctx.fillText(textLabel || '✦ GRATTEZ ✦', w / 2, h / 2 + 3);
+      ctx.strokeRect(4, 4, w - 8, h - 8);
+      ctx.restore();
     }
 
-    initFoil();
+    resizeAndInitFoil();
+    setTimeout(resizeAndInitFoil, 200);
+    setTimeout(resizeAndInitFoil, 800);
+    window.addEventListener('resize', () => {
+      if (!isRevealed) resizeAndInitFoil();
+    });
 
     let isScratching = false;
-    function scratch(x, y) {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    let startX = 0;
+    let startY = 0;
+    let lastX = null;
+    let lastY = null;
+    let hasMovedToScratch = false;
 
     function getCoords(e) {
       const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return { x: clientX - rect.left, y: clientY - rect.top };
+      let clientX, clientY;
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+      return {
+        x: (clientX - rect.left) * (canvas.width / (rect.width || 1)),
+        y: (clientY - rect.top) * (canvas.height / (rect.height || 1)),
+        clientX,
+        clientY
+      };
     }
 
-    canvas.addEventListener('mousedown', (e) => { isScratching = true; const c = getCoords(e); scratch(c.x, c.y); });
-    canvas.addEventListener('mousemove', (e) => { if (isScratching) { const c = getCoords(e); scratch(c.x, c.y); } });
-    window.addEventListener('mouseup', () => { isScratching = false; });
+    function scratchLine(x1, y1, x2, y2) {
+      if (isRevealed) return;
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = 24;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      if (x1 === null || y1 === null) {
+        ctx.arc(x2, y2, 12, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+      ctx.restore();
+      checkScratchPercentage();
+    }
 
+    function checkScratchPercentage() {
+      if (isRevealed) return;
+      try {
+        const imageData = ctx.getImageData(0, 0, w, h);
+        const pixels = imageData.data;
+        let transparentCount = 0;
+        const totalPixels = pixels.length / 4;
+        for (let i = 3; i < pixels.length; i += 16) {
+          if (pixels[i] === 0) {
+            transparentCount += 4;
+          }
+        }
+        if (transparentCount / totalPixels > 0.48) {
+          isRevealed = true;
+          canvas.style.transition = 'opacity 0.5s ease-out';
+          canvas.style.opacity = '0';
+          setTimeout(() => {
+            canvas.style.display = 'none';
+          }, 500);
+        }
+      } catch (err) {
+        // Fallback for security restrictions
+      }
+    }
+
+    // Mouse Events
+    canvas.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      isScratching = true;
+      const c = getCoords(e);
+      lastX = c.x;
+      lastY = c.y;
+      scratchLine(null, null, c.x, c.y);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isScratching) return;
+      e.preventDefault();
+      const c = getCoords(e);
+      scratchLine(lastX, lastY, c.x, c.y);
+      lastX = c.x;
+      lastY = c.y;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isScratching = false;
+      lastX = null;
+      lastY = null;
+    });
+
+    // Touch / Swipe Events (Smart detection: don't erase on page scroll)
+    canvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isScratching = true;
+        hasMovedToScratch = false;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        const c = getCoords(e);
+        lastX = c.x;
+        lastY = c.y;
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      if (!isScratching || e.touches.length !== 1) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+
+      // If user is clearly scrolling down the page vertically, do not scratch
+      if (!hasMovedToScratch && Math.abs(dy) > Math.abs(dx) * 2.0 && Math.abs(dy) > 12) {
+        isScratching = false;
+        return;
+      }
+
+      // If horizontal or deliberate scratch movement inside card:
+      if (Math.hypot(dx, dy) > 5) {
+        hasMovedToScratch = true;
+        if (e.cancelable) e.preventDefault();
+        const c = getCoords(e);
+        scratchLine(lastX, lastY, c.x, c.y);
+        lastX = c.x;
+        lastY = c.y;
+      }
+    }, { passive: false });
+
+    const endTouch = () => {
+      isScratching = false;
+      hasMovedToScratch = false;
+      lastX = null;
+      lastY = null;
+    };
+
+    canvas.addEventListener('touchend', endTouch);
+    canvas.addEventListener('touchcancel', endTouch);
   }
+
+  // Initialize Scratch Cards for Day, Month, Year
+  setupScratchCard('scratchDay', '');
+  setupScratchCard('scratchMonth', '');
+  setupScratchCard('scratchYear', '');
 
   // Live Countdown Timer Engine (11 JUILLET 2026)
   const targetWeddingDate = new Date('2026-07-11T18:00:00').getTime();
@@ -1255,44 +1595,119 @@ function initApp() {
     });
   }
 
+  window.focusEventOnMap = function(lat, lng, title, locationName) {
+    const mapModal = document.getElementById('map-modal');
+    if (typeof openModal === 'function') {
+      openModal(mapModal);
+    } else if (mapModal) {
+      mapModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    setTimeout(() => {
+      if (typeof initOrUpdatePublicMap === 'function') {
+        initOrUpdatePublicMap();
+      }
+      if (publicMap && lat && lng) {
+        publicMap.setView([parseFloat(lat), parseFloat(lng)], 15, { animate: true });
+        publicMap.eachLayer(layer => {
+          if (layer instanceof L.Marker) {
+            const pos = layer.getLatLng();
+            if (Math.abs(pos.lat - parseFloat(lat)) < 0.005 && Math.abs(pos.lng - parseFloat(lng)) < 0.005) {
+              layer.openPopup();
+            }
+          }
+        });
+      }
+    }, 300);
+  };
+
   function loadDynamicTimeline() {
     const container = document.getElementById('wedding-timeline-container');
     if (!container) return;
 
-    fetch('/api/timeline')
+    fetch('/api/events')
       .then(res => res.json())
+      .then(events => {
+        if (!Array.isArray(events) || events.length === 0) {
+          return fetch('/api/timeline').then(r => r.json());
+        }
+        return events;
+      })
       .then(items => {
         if (!Array.isArray(items) || items.length === 0) return;
-        
-        container.innerHTML = items.map((item, index) => {
+
+        function getEventDate(item) {
+          if (!item) return new Date(0);
+          if (typeof parseEventDate === 'function') return parseEventDate(item);
+          if (item.datetime) {
+            const d = new Date(item.datetime);
+            if (!isNaN(d.getTime())) return d;
+          }
+          return new Date(0);
+        }
+
+        const sorted = [...items].sort((a, b) => getEventDate(a) - getEventDate(b));
+
+        container.innerHTML = sorted.map((item, index) => {
           const isEven = index % 2 === 0;
-          const iconSpan = `<span class="material-symbols-outlined" style="font-size: 2rem; color: #CFAB66;">${escapeHtml(item.icon || 'schedule')}</span>`;
-          const textBlock = `
-            <span style="font-family: 'Cinzel', serif; font-size: 0.88rem; font-weight: 700; color: #806B43; display: block;">${escapeHtml(item.time)}</span>
-            <span style="font-family: 'Rufina', serif; font-size: 1rem; color: #382E25; font-weight: 600;">${escapeHtml(item.title)}</span>
-            ${item.description ? `<span style="font-family: 'Montserrat', sans-serif; font-size: 0.72rem; color: #777; display: block; margin-top: 2px;">${escapeHtml(item.description)}</span>` : ''}
+          const iconName = item.icon || (item.isGold ? 'favorite' : 'event');
+          const iconSpan = `<div class="timeline-icon-box"><span class="material-symbols-outlined">${escapeHtml(iconName)}</span></div>`;
+
+          const dateDisplay = item.dateBadge ? `${escapeHtml(item.dateBadge)}${item.time ? ' à ' + escapeHtml(item.time) : ''}` : escapeHtml(item.time || '');
+          const titleDisplay = escapeHtml(item.title || '');
+          const locationDisplay = item.locationName ? escapeHtml(item.locationName) : '';
+          const addressDisplay = item.address ? escapeHtml(item.address) : '';
+          const descDisplay = item.description ? escapeHtml(item.description) : '';
+
+          const hasGps = item.lat && item.lng;
+          const gMapsUrl = item.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((locationDisplay + ' ' + addressDisplay).trim())}`;
+
+          const contentCard = `
+            <div class="timeline-event-card ${item.isGold ? 'gold-event-card' : ''}">
+              <span class="timeline-date-chip">${dateDisplay}</span>
+              <h4 class="timeline-event-title">${titleDisplay}</h4>
+              ${locationDisplay ? `
+                <div class="timeline-location-text">
+                  <span class="material-symbols-outlined">location_on</span>
+                  <span><strong>${locationDisplay}</strong>${addressDisplay ? `<br/><small>${addressDisplay}</small>` : ''}</span>
+                </div>
+              ` : ''}
+              ${descDisplay ? `<p class="timeline-event-desc">"${descDisplay}"</p>` : ''}
+              
+              <div class="timeline-card-actions">
+                ${hasGps ? `
+                  <button type="button" class="btn-timeline-map btn-position-map" onclick="focusEventOnMap(${item.lat}, ${item.lng}, '${escapeJs(titleDisplay)}', '${escapeJs(locationDisplay)}')">
+                    <span class="material-symbols-outlined">map</span> Position Carte
+                  </button>
+                ` : ''}
+                <a href="${gMapsUrl}" target="_blank" rel="noopener" class="btn-timeline-map btn-google-map" onclick="event.stopPropagation();">
+                  <span class="material-symbols-outlined">navigation</span> Google Maps
+                </a>
+              </div>
+            </div>
           `;
 
           if (isEven) {
             return `
-              <div class="timeline-row-item">
-                <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
+              <div class="timeline-row-item timeline-row-even">
+                <div class="timeline-col-side timeline-col-left">
                   ${iconSpan}
                 </div>
-                <div class="timeline-node-marker"></div>
-                <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
-                  ${textBlock}
+                <div class="timeline-node-marker ${item.isGold ? 'gold-node' : ''}"></div>
+                <div class="timeline-col-side timeline-col-right">
+                  ${contentCard}
                 </div>
               </div>
             `;
           } else {
             return `
-              <div class="timeline-row-item">
-                <div style="flex: 1; text-align: right; padding-right: 1.5rem;">
-                  ${textBlock}
+              <div class="timeline-row-item timeline-row-odd">
+                <div class="timeline-col-side timeline-col-left">
+                  ${contentCard}
                 </div>
-                <div class="timeline-node-marker"></div>
-                <div style="flex: 1; text-align: left; padding-left: 1.5rem;">
+                <div class="timeline-node-marker ${item.isGold ? 'gold-node' : ''}"></div>
+                <div class="timeline-col-side timeline-col-right">
                   ${iconSpan}
                 </div>
               </div>
@@ -1300,10 +1715,15 @@ function initApp() {
           }
         }).join('');
       })
-      .catch(err => console.error("Error loading timeline:", err));
+      .catch(err => console.error("Error loading dynamic timeline:", err));
   }
 
   loadDynamicTimeline();
+
+  function escapeJs(str) {
+    if (!str) return '';
+    return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');
+  }
 
   function escapeHtml(str) {
     if (!str) return '';
