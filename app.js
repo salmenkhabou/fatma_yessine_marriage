@@ -686,11 +686,12 @@ function initApp() {
   if (cuteMessageForm) {
     cuteMessageForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = document.getElementById('msg-sender-name').value.trim();
+      const rawName = document.getElementById('msg-sender-name').value.trim();
+      const name = rawName || 'Anonyme';
       const text = document.getElementById('msg-content-text').value.trim();
       const alertBox = document.getElementById('msg-success-alert');
 
-      if (!name || !text) return;
+      if (!text) return;
 
       const submitBtn = document.getElementById('msg-submit-btn');
       if (submitBtn) submitBtn.disabled = true;

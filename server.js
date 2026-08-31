@@ -95,14 +95,16 @@ app.get('/api/messages', (req, res) => {
 app.post('/api/messages', (req, res) => {
   try {
     const { name, message } = req.body;
-    if (!name || !message) {
-      return res.status(400).json({ error: 'Votre nom et votre mot doux sont requis.' });
+    if (!message || !message.trim()) {
+      return res.status(400).json({ error: 'Votre mot doux est requis.' });
     }
+
+    const senderName = (name && name.trim()) ? name.trim() : 'Anonyme';
 
     const messages = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8') || '[]');
     const newMsg = {
       id: 'msg-' + Date.now(),
-      name: name.trim(),
+      name: senderName,
       message: message.trim(),
       createdAt: new Date().toISOString()
     };
