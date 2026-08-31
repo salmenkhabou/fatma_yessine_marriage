@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Main Stylesheet -->
-  <link href="style.css?v=5.0" rel="stylesheet" />
-  <link href="scratch_styles.css?v=5.0" rel="stylesheet" />
+  <link href="style.css?v=7.0" rel="stylesheet" />
+  <link href="scratch_styles.css?v=30.0" rel="stylesheet" />
 
   <!-- Standalone Opening & Audio Handlers -->
   <script>
@@ -103,7 +103,7 @@
           }
         };
 
-        setTimeout(finishVideo, 3200);
+        setTimeout(finishVideo, 12000);
       }
     }
 
@@ -151,7 +151,7 @@
 
   <!-- 1. WEBGENCY FULLSCREEN ENVELOPE OVERLAY -->
   <div id="weiOverlay" onclick="openTimelessInvitation()">
-    <img id="weiImg" src="envelope_yf.png?v=2" alt="Ouvrir votre invitation" draggable="false">
+    <img id="weiImg" src="envelope_orig.png" alt="Ouvrir votre invitation" draggable="false">
     <div id="weiTapWrap">
       <div class="wei-chevron"></div>
       <div id="weiTapLabel">Appuyez pour ouvrir</div>
@@ -161,7 +161,7 @@
   <!-- 2. ENVELOPE OPENING VIDEO TRANSITION -->
   <div id="weiVideoWrap">
     <video id="weiVideo"
-      src="https://pub-96ce671efbac4dbfbc89b044c631a913.r2.dev/Envelope_opening_with_golden_light_202607270136.mp4"
+      src="envelope_opening_yf_v200.mp4"
       muted playsinline preload="auto"></video>
   </div>
 

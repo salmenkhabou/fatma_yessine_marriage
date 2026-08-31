@@ -3410,7 +3410,7 @@ body {
   height: auto;
   z-index: 12;
   pointer-events: none;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(0 6px 14px rgba(128, 107, 67, 0.18));
   animation: floralSwayBL 6.5s infinite ease-in-out alternate;
 }
 
@@ -3423,7 +3423,7 @@ body {
   transform: scaleX(-1);
   z-index: 12;
   pointer-events: none;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(0 6px 14px rgba(128, 107, 67, 0.18));
   animation: floralSwayBR 7s infinite ease-in-out alternate;
 }
 
