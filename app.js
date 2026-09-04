@@ -402,7 +402,7 @@ function initApp() {
     }
 
     const now = new Date();
-    const sorted = [...events].sort((a, b) => parseEventDate(a) - parseEventDate(b));
+    const sorted = [...events];
 
     let nextEventIndex = sorted.findIndex(e => parseEventDate(e) >= now);
     if (nextEventIndex === -1 && sorted.length > 0) {
@@ -548,17 +548,31 @@ function initApp() {
   function initOrUpdatePublicMap() {
     if (typeof L === 'undefined') return;
 
+    const defaultEvents = [
+      {
+        title: "Célébration & Soirée de Mariage (Yessine & Fatma)",
+        locationName: "Sfax, Tunisie",
+        dateBadge: "Vendredi 11 Juillet 2026",
+        time: "19:00",
+        lat: 34.747,
+        lng: 10.760
+      }
+    ];
+
+    const eventsToDraw = (fetchedEvents && fetchedEvents.filter(e => e.lat && e.lng).length > 0)
+      ? fetchedEvents
+      : defaultEvents;
+
     // 1. Modal Map
     const mapContainer = document.getElementById('public-map');
     if (mapContainer) {
       if (!publicMap) {
         publicMap = L.map('public-map').setView([34.747, 10.760], 12);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; OpenStreetMap', subdomains: 'abcd', maxZoom: 19
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors', maxZoom: 19
         }).addTo(publicMap);
-      } else {
-        publicMap.invalidateSize();
       }
+      setTimeout(() => publicMap && publicMap.invalidateSize(), 200);
     }
 
     // 2. Inline Embedded Map
@@ -566,19 +580,18 @@ function initApp() {
     if (inlineContainer) {
       if (!inlineMap) {
         inlineMap = L.map('inline-map').setView([34.747, 10.760], 12);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; OpenStreetMap', subdomains: 'abcd', maxZoom: 19
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors', maxZoom: 19
         }).addTo(inlineMap);
-      } else {
-        inlineMap.invalidateSize();
       }
+      setTimeout(() => inlineMap && inlineMap.invalidateSize(), 200);
     }
 
     const goldIcon = L.divIcon({
       className: 'custom-gold-marker',
-      html: `<div style="background-color: #d4af37; border: 2px solid #ffffff; width: 26px; height: 26px; border-radius: 50%; box-shadow: 0 0 12px rgba(212,175,55,0.8); display: flex; align-items: center; justify-content: center;"><span class="material-symbols-outlined" style="font-size: 15px; color: #fff;">favorite</span></div>`,
-      iconSize: [26, 26],
-      iconAnchor: [13, 13]
+      html: `<div style="background-color: #d4af37; border: 2px solid #ffffff; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 14px rgba(212,175,55,0.9); display: flex; align-items: center; justify-content: center;"><span class="material-symbols-outlined" style="font-size: 16px; color: #fff;">favorite</span></div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
     });
 
     [publicMap, inlineMap].forEach(m => {
@@ -586,11 +599,11 @@ function initApp() {
       m.eachLayer(layer => { if (layer instanceof L.Marker) m.removeLayer(layer); });
 
       const bounds = [];
-      fetchedEvents.forEach(evt => {
+      eventsToDraw.forEach(evt => {
         if (evt.lat && evt.lng) {
           const marker = L.marker([evt.lat, evt.lng], { icon: goldIcon }).addTo(m);
           marker.bindPopup(`
-            <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
+            <div style="font-family: 'Montserrat', sans-serif; text-align: center; padding: 4px;">
               <strong style="color: #997c55; font-size: 0.9rem;">${escapeHtml(evt.title)}</strong><br/>
               <span style="font-size: 0.75rem; color: #444;">${escapeHtml(evt.locationName)}</span><br/>
               <small style="color: #888;">${escapeHtml(evt.dateBadge)} à ${escapeHtml(evt.time)}</small>
@@ -600,11 +613,27 @@ function initApp() {
         }
       });
 
-      if (bounds.length > 0) m.fitBounds(bounds, { padding: [30, 30] });
+      if (bounds.length > 0) {
+        if (bounds.length === 1) {
+          m.setView(bounds[0], 13);
+        } else {
+          m.fitBounds(bounds, { padding: [30, 30] });
+        }
+      }
     });
   }
 
   fetchAndRenderEvents();
+
+  // Retry Map Init to handle any async DOM/Script load delay
+  if (document.readyState === 'complete') {
+    setTimeout(initOrUpdatePublicMap, 300);
+  } else {
+    window.addEventListener('load', function() {
+      setTimeout(initOrUpdatePublicMap, 300);
+      setTimeout(initOrUpdatePublicMap, 1000);
+    });
+  }
 
   // ==========================================================================
   // 4. Countdown Ticker Engine

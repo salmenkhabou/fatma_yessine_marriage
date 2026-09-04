@@ -1,66 +1,65 @@
-import urllib.request
-import ssl
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import cv2
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 
 envelope_path = r"c:\digital invitation emna_siala\envelope_orig.png"
 font_path = r"c:\digital invitation emna_siala\PinyonScript-Regular.ttf"
 
-env_img = Image.open(envelope_path).convert("RGBA")
-w, h = env_img.size
+# 1. Load full original envelope (941 x 1672 BGR)
+img_bgr = cv2.imread(envelope_path)
+h, w, _ = img_bgr.shape
 
-cx = 470
-cy = 878
-radius = 112
+# Seal region crop (y: 697 to 997, x: 321 to 621)
+crop = img_bgr[697:997, 321:621]
 
-# 1. Smooth Pearl Wax Seal Face Fill
-fill_layer = Image.new('RGBA', (w, h), (0, 0, 0, 0))
-fdraw = ImageDraw.Draw(fill_layer)
+# Detect gold stroke pixels of D&A in crop
+wax_bg = np.array([210, 225, 238], dtype=float) # BGR
+dist = np.linalg.norm(crop.astype(float) - wax_bg, axis=2)
 
-for r in range(radius, 0, -1):
-    factor = r / radius
-    r_col = int(251 - factor * 12)
-    g_col = int(244 - factor * 16)
-    b_col = int(235 - factor * 20)
-    fdraw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(r_col, g_col, b_col, 255))
+stroke_mask = (dist > 38).astype(np.uint8) * 255
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+stroke_mask = cv2.dilate(stroke_mask, kernel, iterations=2)
 
-# Feathered blending mask
-mask = Image.new('L', (w, h), 0)
-mdraw = ImageDraw.Draw(mask)
-mdraw.ellipse((cx - radius + 2, cy - radius + 2, cx + radius - 2, cy + radius - 2), fill=255)
-mask = mask.filter(ImageFilter.GaussianBlur(2.5))
+# Perform Navier-Stokes inpainting to seamlessly erase D&A strokes while preserving 3D wax texture
+inpainted_crop = cv2.inpaint(crop, stroke_mask, 7, cv2.INPAINT_TELEA)
 
-env_img.paste(fill_layer, (0, 0), mask)
+# Replace crop in full img_bgr
+img_bgr[697:997, 321:621] = inpainted_crop
 
-# 2. Render 3D Gold Cursive Script Calligraphy: Y & F
+# Convert to PIL RGBA image
+env_pil = Image.fromarray(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGBA))
+
+# 2. Render 3D Gold Cursive Calligraphy: Y & F
+cx, cy = 471, 847
+font_large = ImageFont.truetype(font_path, 115)
+font_amp = ImageFont.truetype(font_path, 70)
+
 text_layer = Image.new('RGBA', (w, h), (0, 0, 0, 0))
 tdraw = ImageDraw.Draw(text_layer)
 
-script_font_large = ImageFont.truetype(font_path, 125)
-script_font_amp = ImageFont.truetype(font_path, 75)
+y_x, y_y = cx - 64, cy - 66
+amp_x, amp_y = cx - 12, cy - 32
+f_x, f_y = cx + 16, cy - 66
 
-# Centered Monogram Position for Pinyon Script Y & F
-y_x, y_y = cx - 64, cy - 70
-amp_x, amp_y = cx - 12, cy - 36
-f_x, f_y = cx + 18, cy - 70
-
-# 3D Shadow / Emboss
-tdraw.text((y_x + 2, y_y + 2), "Y", font=script_font_large, fill=(70, 50, 20, 220))
-tdraw.text((amp_x + 2, amp_y + 2), "&", font=script_font_amp, fill=(90, 65, 30, 220))
-tdraw.text((f_x + 2, f_y + 2), "F", font=script_font_large, fill=(70, 50, 20, 220))
+# 3D Deep Shadow / Emboss
+tdraw.text((y_x + 2.5, y_y + 2.5), 'Y', font=font_large, fill=(55, 38, 14, 230))
+tdraw.text((amp_x + 2, amp_y + 2), '&', font=font_amp, fill=(70, 48, 18, 230))
+tdraw.text((f_x + 2.5, f_y + 2.5), 'F', font=font_large, fill=(55, 38, 14, 230))
 
 # Gold Highlight
-tdraw.text((y_x - 1.5, y_y - 1.5), "Y", font=script_font_large, fill=(255, 250, 225, 240))
-tdraw.text((amp_x - 1.5, amp_y - 1.5), "&", font=script_font_amp, fill=(255, 250, 225, 240))
-tdraw.text((f_x - 1.5, f_y - 1.5), "F", font=script_font_large, fill=(255, 250, 225, 240))
+tdraw.text((y_x - 1.5, y_y - 1.5), 'Y', font=font_large, fill=(255, 250, 230, 245))
+tdraw.text((amp_x - 1.5, amp_y - 1.5), '&', font=font_amp, fill=(255, 250, 230, 245))
+tdraw.text((f_x - 1.5, f_y - 1.5), 'F', font=font_large, fill=(255, 250, 230, 245))
 
 # Warm Metallic Gold Main Fill
-tdraw.text((y_x, y_y), "Y", font=script_font_large, fill=(185, 142, 68, 255))
-tdraw.text((amp_x, amp_y), "&", font=script_font_amp, fill=(160, 120, 52, 255))
-tdraw.text((f_x, f_y), "F", font=script_font_large, fill=(185, 142, 68, 255))
+tdraw.text((y_x, y_y), 'Y', font=font_large, fill=(185, 142, 68, 255))
+tdraw.text((amp_x, amp_y), '&', font=font_amp, fill=(160, 120, 52, 255))
+tdraw.text((f_x, f_y), 'F', font=font_large, fill=(185, 142, 68, 255))
 
-env_img.alpha_composite(text_layer)
+env_pil.alpha_composite(text_layer)
 
-# Save patched envelope
+# Save to all envelope image files in workspace
 output_path = r"c:\digital invitation emna_siala\envelope_yf.png"
-env_img.save(output_path, "PNG")
-print(f"Successfully saved refined Pinyon Script Y&F envelope to {output_path}")
+env_pil.save(output_path, "PNG")
+env_pil.save(r"c:\digital invitation emna_siala\envelope_yessine_fatma.png", "PNG")
+print(f"Successfully saved inpainted 3D Y&F envelope to {output_path}")

@@ -227,6 +227,31 @@ app.delete('/api/admin/events/:id', requireAdmin, (req, res) => {
   }
 });
 
+app.post('/api/admin/events/reorder', requireAdmin, (req, res) => {
+  try {
+    const { order } = req.body;
+    if (!Array.isArray(order)) {
+      return res.status(400).json({ error: 'L\'ordre doit être un tableau d\'IDs.' });
+    }
+    let events = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf8') || '[]');
+    const itemMap = new Map(events.map(item => [item.id, item]));
+    const reordered = [];
+    order.forEach(id => {
+      if (itemMap.has(id)) {
+        reordered.push(itemMap.get(id));
+        itemMap.delete(id);
+      }
+    });
+    itemMap.forEach(item => reordered.push(item));
+    fs.writeFileSync(EVENTS_FILE, JSON.stringify(reordered, null, 2), 'utf8');
+    return res.json({ success: true, events: reordered });
+  } catch (err) {
+    console.error('Error reordering events:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 // --------------------------------------------------------------------------
 // 4. Guest & Family Endpoints
 // --------------------------------------------------------------------------

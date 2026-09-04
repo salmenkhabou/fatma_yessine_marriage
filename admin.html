@@ -485,6 +485,7 @@
         <table>
           <thead>
             <tr>
+              <th style="width:80px;">Ordre</th>
               <th>Événement</th>
               <th>Date & Heure</th>
               <th>Lieu & Adresse</th>
@@ -962,13 +963,17 @@
       const tbody = document.getElementById('events-tbody');
       tbody.innerHTML = '';
 
-      events.forEach(evt => {
+      events.forEach((evt, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
+          <td>
+            <button class="btn-gold btn-outline" style="padding:0.15rem 0.35rem; font-size:0.6rem; margin-right:2px;" onclick="moveEvent('${evt.id}', 'up')" ${index === 0 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>▲</button>
+            <button class="btn-gold btn-outline" style="padding:0.15rem 0.35rem; font-size:0.6rem;" onclick="moveEvent('${evt.id}', 'down')" ${index === events.length - 1 ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''}>▼</button>
+          </td>
           <td><strong>${escapeHtml(evt.title)}</strong></td>
           <td>${escapeHtml(evt.dateBadge)} à ${escapeHtml(evt.time)}</td>
           <td>${escapeHtml(evt.locationName)} <br/><small>${escapeHtml(evt.address)}</small></td>
-          <td><small>${evt.lat}, ${evt.lng}</small></td>
+          <td><small id="gps-${evt.id}">${evt.lat}, ${evt.lng}</small></td>
           <td>
             <button class="btn-gold btn-outline" style="padding:0.3rem 0.6rem; font-size:0.65rem;" onclick="editEvent('${evt.id}')">Éditer</button>
             <button class="btn-gold btn-danger" style="padding:0.3rem 0.6rem; font-size:0.65rem;" onclick="deleteEvent('${evt.id}')">Supprimer</button>
@@ -976,6 +981,30 @@
         `;
         tbody.appendChild(tr);
       });
+      setTimeout(initOrUpdateAdminMap, 100);
+    }
+
+    function moveEvent(id, direction) {
+      const idx = eventsData.findIndex(x => x.id === id);
+      if (idx === -1) return;
+      const newIdx = direction === 'up' ? idx - 1 : idx + 1;
+      if (newIdx < 0 || newIdx >= eventsData.length) return;
+
+      const temp = eventsData[idx];
+      eventsData[idx] = eventsData[newIdx];
+      eventsData[newIdx] = temp;
+
+      const order = eventsData.map(x => x.id);
+      fetch('/api/admin/events/reorder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ order })
+      })
+      .then(res => res.json())
+      .then(() => renderEvents(eventsData));
     }
 
     function initOrUpdateAdminMap() {
@@ -993,12 +1022,82 @@
         if (layer instanceof L.Marker) adminMap.removeLayer(layer);
       });
 
+      // Calculate coordinate overlaps for automatic visual offsets
+      const coordCounts = {};
       eventsData.forEach(evt => {
         if (evt.lat && evt.lng) {
-          const marker = L.marker([evt.lat, evt.lng]).addTo(adminMap);
-          marker.bindPopup(`<b>${escapeHtml(evt.title)}</b><br/>${escapeHtml(evt.locationName)}`);
+          const key = `${parseFloat(evt.lat).toFixed(3)}_${parseFloat(evt.lng).toFixed(3)}`;
+          coordCounts[key] = (coordCounts[key] || 0) + 1;
         }
       });
+
+      const coordSeen = {};
+      const bounds = [];
+
+      eventsData.forEach((evt, idx) => {
+        if (evt.lat && evt.lng) {
+          let lat = parseFloat(evt.lat);
+          let lng = parseFloat(evt.lng);
+          const key = `${lat.toFixed(3)}_${lng.toFixed(3)}`;
+          const count = coordCounts[key];
+
+          let displayLat = lat;
+          let displayLng = lng;
+
+          if (count > 1) {
+            const seenIndex = coordSeen[key] || 0;
+            coordSeen[key] = seenIndex + 1;
+            const angle = (seenIndex * (2 * Math.PI / count));
+            const radius = 0.0015; // Offset stacked pins so they fan out neatly
+            displayLat = lat + radius * Math.cos(angle);
+            displayLng = lng + radius * Math.sin(angle);
+          }
+
+          const marker = L.marker([displayLat, displayLng], {
+            draggable: true,
+            title: evt.title
+          }).addTo(adminMap);
+
+          bounds.push([displayLat, displayLng]);
+
+          marker.bindPopup(`
+            <div style="font-family: sans-serif; text-align: center;">
+              <strong style="color: var(--gold-dark);">${escapeHtml(evt.title)}</strong><br/>
+              <small>${escapeHtml(evt.locationName)}</small><br/>
+              <span style="font-size: 0.7rem; color: #888;">📍 Déplacez ce marqueur pour changer la position GPS</span>
+            </div>
+          `);
+
+          marker.on('dragend', function(e) {
+            const newPos = e.target.getLatLng();
+            const newLat = parseFloat(newPos.lat.toFixed(5));
+            const newLng = parseFloat(newPos.lng.toFixed(5));
+
+            evt.lat = newLat;
+            evt.lng = newLng;
+
+            const gpsEl = document.getElementById(`gps-${evt.id}`);
+            if (gpsEl) gpsEl.textContent = `${newLat}, ${newLng}`;
+
+            fetch(`/api/admin/events/${evt.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+              },
+              body: JSON.stringify({ lat: newLat, lng: newLng })
+            });
+          });
+        }
+      });
+
+      if (bounds.length > 0) {
+        if (bounds.length === 1) {
+          adminMap.setView(bounds[0], 13);
+        } else {
+          adminMap.fitBounds(bounds, { padding: [40, 40] });
+        }
+      }
     }
 
     function openAddEventModal() {
