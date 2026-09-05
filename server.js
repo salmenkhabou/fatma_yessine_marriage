@@ -28,6 +28,16 @@ app.use((req, res, next) => {
   res.set('Surrogate-Control', 'no-store');
   next();
 });
+
+// Clean Route for /admin
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.redirect(301, '/admin');
+});
+
 app.use(express.static(path.join(__dirname), {
   etag: false,
   lastModified: false,
