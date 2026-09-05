@@ -204,6 +204,7 @@ function initApp() {
         renderLuxuryTimeline(fetchedEvents);
         renderVenuesGrid(fetchedEvents);
         initOrUpdatePublicMap();
+        if (typeof updateTimelessCountdown === 'function') updateTimelessCountdown();
       })
       .catch(err => {
         console.error("Error loading events:", err);
@@ -1559,12 +1560,28 @@ function initApp() {
   setupScratchCard('scratchMonth', '');
   setupScratchCard('scratchYear', '');
 
-  // Live Countdown Timer Engine (11 JUILLET 2026)
-  const targetWeddingDate = new Date('2026-07-11T18:00:00').getTime();
-
+  // Live Countdown Timer Engine
   function updateTimelessCountdown() {
+    let target = null;
     const now = new Date().getTime();
-    const diff = targetWeddingDate - now;
+
+    if (fetchedEvents && fetchedEvents.length > 0) {
+      const upcoming = fetchedEvents
+        .map(e => parseEventDate(e).getTime())
+        .filter(t => t > now)
+        .sort((a, b) => a - b);
+
+      if (upcoming.length > 0) {
+        target = upcoming[0];
+      }
+    }
+
+    if (!target || target <= now) {
+      // Fallback target date if no future event found (e.g. 25 Novembre 2026)
+      target = new Date('2026-11-25T20:00:00').getTime();
+    }
+
+    const diff = target - now;
 
     const tDays = document.getElementById('timer-days');
     const tHours = document.getElementById('timer-hours');
