@@ -1,21 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#58111A"/>
-      <stop offset="100%" stop-color="#30080E"/>
+      <stop offset="0%" stop-color="#FDF4EB"/>
+      <stop offset="100%" stop-color="#F9F0E0"/>
     </linearGradient>
     <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F3E5AB"/>
-      <stop offset="35%" stop-color="#D4AF37"/>
-      <stop offset="70%" stop-color="#AA820A"/>
-      <stop offset="100%" stop-color="#F5D061"/>
+      <stop offset="0%" stop-color="#CFAB66"/>
+      <stop offset="50%" stop-color="#806B43"/>
+      <stop offset="100%" stop-color="#655230"/>
     </linearGradient>
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E6D7C3"/>
+      <stop offset="50%" stop-color="#CFAB66"/>
+      <stop offset="100%" stop-color="#806B43"/>
+    </linearGradient>
   </defs>
+  <!-- Background matching website theme -->
   <rect width="512" height="512" rx="100" fill="url(#bgGrad)"/>
-  <rect x="24" y="24" width="464" height="464" rx="80" fill="none" stroke="url(#goldGrad)" stroke-width="8" opacity="0.85"/>
-  <rect x="34" y="34" width="444" height="444" rx="70" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.4"/>
-  <text x="256" y="325" font-family="'Great Vibes', 'Cinzel', 'Playfair Display', serif" font-size="220" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="4" filter="url(#shadow)">YF</text>
+  <!-- Gold borders -->
+  <rect x="22" y="22" width="468" height="468" rx="80" fill="none" stroke="url(#borderGrad)" stroke-width="7" opacity="0.9"/>
+  <rect x="32" y="32" width="448" height="448" rx="70" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.4"/>
+  <!-- Monogram YF -->
+  <text x="256" y="325" font-family="'Great Vibes', 'Pinyon Script', 'Cinzel', serif" font-size="220" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="4">YF</text>
 </svg>
