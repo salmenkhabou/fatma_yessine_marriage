@@ -1,25 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
+    <!-- Background Gradient matching site theme #FDF4EB to #F9F0E0 -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FDF4EB"/>
       <stop offset="100%" stop-color="#F9F0E0"/>
     </linearGradient>
+
+    <!-- Luxury Antique Gold Gradient -->
     <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#CFAB66"/>
-      <stop offset="50%" stop-color="#806B43"/>
-      <stop offset="100%" stop-color="#655230"/>
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="45%" stop-color="#806B43"/>
+      <stop offset="100%" stop-color="#5B4A28"/>
     </linearGradient>
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#E6D7C3"/>
+
+    <!-- Bright Warm Gold Gradient for Rings -->
+    <linearGradient id="goldBrightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E5AB"/>
       <stop offset="50%" stop-color="#CFAB66"/>
       <stop offset="100%" stop-color="#806B43"/>
     </linearGradient>
+
+    <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#806B43" flood-opacity="0.3"/>
+    </filter>
   </defs>
-  <!-- Background matching website theme -->
-  <rect width="512" height="512" rx="100" fill="url(#bgGrad)"/>
-  <!-- Gold borders -->
-  <rect x="22" y="22" width="468" height="468" rx="80" fill="none" stroke="url(#borderGrad)" stroke-width="7" opacity="0.9"/>
-  <rect x="32" y="32" width="448" height="448" rx="70" fill="none" stroke="url(#goldGrad)" stroke-width="2" opacity="0.4"/>
-  <!-- Monogram YF -->
-  <text x="256" y="325" font-family="'Great Vibes', 'Pinyon Script', 'Cinzel', serif" font-size="220" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="4">YF</text>
+
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+
+  <!-- Outer Solid Gold Ring -->
+  <circle cx="256" cy="256" r="230" fill="none" stroke="url(#goldBrightGrad)" stroke-width="7"/>
+
+  <!-- Inner Dotted Ring -->
+  <circle cx="256" cy="256" r="214" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-dasharray="8 6"/>
+
+  <!-- Thin Inner Accent Circle -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#goldBrightGrad)" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Top Star Ornament -->
+  <path d="M 256 68 L 260 80 L 272 84 L 260 88 L 256 100 L 252 88 L 240 84 L 252 80 Z" fill="url(#goldGrad)"/>
+
+  <!-- Calligraphic Script Monogram YF -->
+  <text x="256" y="325" font-family="'Pinyon Script', 'Great Vibes', 'Cinzel', 'Playfair Display', serif" font-size="220" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="-2" filter="url(#glow)">YF</text>
+
+  <!-- Bottom Flourish Arc & Diamond -->
+  <path d="M 200 376 Q 256 360 312 376" stroke="url(#goldGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <polygon points="256,388 261,395 256,402 251,395" fill="url(#goldGrad)"/>
 </svg>
