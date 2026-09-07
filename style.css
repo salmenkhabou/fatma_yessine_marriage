@@ -4175,75 +4175,26 @@ html, body {
     font-size: 1.4rem !important;
   }
 
-/* Photo Dropzone & Vault Styles */
-.photo-drop-area {
-  border: 2px dashed rgba(207, 171, 102, 0.6);
-  background: linear-gradient(145deg, rgba(253, 244, 235, 0.7) 0%, rgba(249, 237, 224, 0.4) 100%);
-  border-radius: 20px;
-  padding: 1.65rem 1.25rem;
-  text-align: center;
+/* Photo Vault File Choice Button Styles */
+.photo-select-wrap {
+  width: 100%;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  margin-top: 0.5rem;
 }
 
-.photo-drop-area:hover,
-.photo-drop-area.drag-over {
-  background: rgba(207, 171, 102, 0.16);
+.photo-select-wrap button {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(180, 140, 70, 0.12);
+}
+
+.photo-select-wrap:active button,
+.photo-select-wrap:hover button {
+  background: rgba(207, 171, 102, 0.18);
   border-color: var(--gold-dark, #806B43);
-  transform: scale(0.99);
-}
-
-.dropzone-icon-circle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #FFFDF8 0%, #F4E8D6 100%);
-  box-shadow: 0 4px 15px rgba(180, 140, 70, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold-dark, #806B43);
-  margin-bottom: 0.25rem;
-}
-
-.dropzone-icon-circle span {
-  font-size: 26px !important;
-}
-
-.dropzone-title {
-  font-family: var(--font-title, 'Cinzel', serif);
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--charcoal, #382E25);
-  margin: 0;
-}
-
-.dropzone-subtitle {
-  font-family: var(--font-sans, 'Montserrat', sans-serif);
-  font-size: 0.72rem;
-  color: rgba(56, 46, 37, 0.65);
-  margin: 0;
-}
-
-.dropzone-badge {
-  font-family: var(--font-sans, 'Montserrat', sans-serif);
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--gold-dark, #806B43);
-  background: rgba(207, 171, 102, 0.2);
-  padding: 4px 14px;
-  border-radius: 20px;
-  margin-top: 0.3rem;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(180, 140, 70, 0.22);
 }
 
 .hidden-file-input {

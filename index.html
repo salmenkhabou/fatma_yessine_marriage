@@ -629,15 +629,12 @@
         </div>
 
         <div class="form-group">
-          <label>Vos Photos de Mariage</label>
-          <div id="photo-dropzone" class="photo-drop-area">
-            <div class="dropzone-icon-circle">
-              <span class="material-symbols-outlined">add_photo_alternate</span>
-            </div>
-            <h4 class="dropzone-title">Toucher pour choisir des photos</h4>
-            <p class="dropzone-subtitle">ou glissez-déposez vos fichiers ici</p>
-            <div class="dropzone-badge">JPG, PNG, WEBP • Plusieurs photos</div>
-            <input type="file" id="photo-file-input" multiple accept="image/*" class="hidden-file-input" />
+          <div id="photo-dropzone" class="photo-select-wrap" onclick="document.getElementById('photo-file-input').click()">
+            <button type="button" class="btn-luxury btn-gold-outline w-full" style="display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.9rem 1rem; border-radius: 16px;">
+              <span class="material-symbols-outlined" style="font-size: 1.35rem;">add_photo_alternate</span>
+              <span style="font-weight: 600; font-size: 0.85rem;">Choisir vos photos de mariage</span>
+            </button>
+            <input type="file" id="photo-file-input" multiple accept="image/*" style="display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0 !important; height: 0 !important; position: absolute !important;" />
           </div>
         </div>
 
