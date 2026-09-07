@@ -382,19 +382,29 @@
       </div>
     </section>
 
-    <!-- 11. ACTION BUTTONS (RSVP, MAP & GUESTBOOK) -->
-    <section class="reveal-card" style="padding: 0 1rem; display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
-      <button id="open-rsvp-btn" style="background: var(--charcoal); color: #ffffff; border: none; padding: 1.1rem 1.5rem; border-radius: 14px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 8px 25px rgba(56, 46, 37, 0.25); transition: transform 0.3s ease;">
+    <!-- 11. ACTION BUTTONS (RSVP, MAP, GUESTBOOK, QR & PHOTOS) -->
+    <section class="reveal-card" style="padding: 0 1rem; display: flex; flex-direction: column; gap: 0.85rem; margin-top: 2rem;">
+      <button id="open-rsvp-btn" class="btn-luxury btn-gold btn-large" style="width: 100%; font-size: 0.82rem;">
         <span class="material-symbols-outlined">how_to_reg</span> Confirmer Votre Présence (RSVP)
       </button>
 
-      <div style="display: flex; gap: 0.75rem;">
-        <button id="open-map-btn" style="flex: 1; background: #ffffff; color: var(--gold-dark); border: 1.5px solid var(--gold); padding: 0.85rem 1rem; border-radius: 12px; font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+      <div style="display: flex; gap: 0.65rem;">
+        <button id="open-map-btn" class="btn-luxury btn-gold-outline" style="flex: 1; padding: 0.85rem 0.6rem; font-size: 0.68rem;">
           <span class="material-symbols-outlined">map</span> Carte Lieu
         </button>
 
-        <button id="open-messages-wall-btn" style="flex: 1; background: #ffffff; color: var(--gold-dark); border: 1.5px solid var(--gold); padding: 0.85rem 1rem; border-radius: 12px; font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+        <button id="open-messages-wall-btn" class="btn-luxury btn-gold-outline" style="flex: 1; padding: 0.85rem 0.6rem; font-size: 0.68rem;">
           <span class="material-symbols-outlined">favorite</span> Mots Doux ❤️
+        </button>
+      </div>
+
+      <div style="display: flex; gap: 0.65rem;">
+        <button id="open-qr-btn" class="btn-luxury btn-gold-outline" style="flex: 1; padding: 0.85rem 0.6rem; font-size: 0.68rem;">
+          <span class="material-symbols-outlined">qr_code_2</span> QR Code & Partage
+        </button>
+
+        <button id="open-photo-upload-btn" class="btn-luxury btn-gold-outline" style="flex: 1; padding: 0.85rem 0.6rem; font-size: 0.68rem;">
+          <span class="material-symbols-outlined">photo_camera</span> Déposer vos Photos 📸
         </button>
       </div>
     </section>
@@ -571,6 +581,78 @@
         <button id="success-done-btn" class="btn-luxury btn-gold w-full mt-4">Fermer</button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- MODAL: QR CODE & INVITATION LINK SHARE -->
+  <div id="qr-modal" class="modal-overlay">
+    <div class="modal-container qr-modal-container" style="max-width: 420px; text-align: center;">
+      <button class="modal-close" id="qr-close-btn" aria-label="Fermer le modal QR Code">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <h3 class="modal-title">Partager l'Invitation</h3>
+      <p class="modal-subtitle">Scannez le QR Code ou copiez le lien d'invitation</p>
+
+      <div style="margin: 1.5rem 0; display: flex; justify-content: center;">
+        <div style="background: #ffffff; padding: 12px; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(180, 140, 70, 0.2);">
+          <img id="qr-code-img" src="" alt="QR Code Yessine & Fatma" style="width: 210px; height: 210px; display: block; border-radius: 10px;" />
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+        <button id="copy-invitation-link-btn" class="btn-luxury btn-gold w-full">
+          <span class="material-symbols-outlined">content_copy</span> Copier le Lien d'Invitation
+        </button>
+        <a id="download-qr-btn" download="QR_Code_Yessine_Fatma.png" href="" class="btn-luxury btn-gold-outline w-full" target="_blank">
+          <span class="material-symbols-outlined">download</span> Télécharger le QR Code
+        </a>
+      </div>
+      <div id="copy-link-toast" class="search-error-box hidden" style="background:#f0fdf4; border-color:#10b981; color:#047857; margin-top:0.75rem;">Lien copié dans le presse-papier ! ✨</div>
+    </div>
+  </div>
+
+  <!-- MODAL: GUEST PHOTO UPLOAD VAULT -->
+  <div id="photo-upload-modal" class="modal-overlay">
+    <div class="modal-container photo-modal-container" style="max-width: 480px;">
+      <button class="modal-close" id="photo-upload-close-btn" aria-label="Fermer le modal photo">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <h3 class="modal-title">Déposer vos Photos</h3>
+      <p class="modal-subtitle">Partagez vos plus beaux clichés du mariage avec Yessine & Fatma 📸</p>
+
+      <form id="photo-vault-form" class="luxury-form mt-3">
+        <div class="form-group">
+          <label for="photo-sender-name">Votre Nom & Prénom <span style="font-weight:400; opacity:0.75;">(Optionnel)</span></label>
+          <input type="text" id="photo-sender-name" class="form-input" placeholder="Ex: Famille Khabou, Salmen..." />
+        </div>
+
+        <div class="form-group">
+          <label>Sélectionnez ou Glissez vos Photos</label>
+          <div id="photo-dropzone" class="photo-drop-area">
+            <span class="material-symbols-outlined dropzone-icon">cloud_upload</span>
+            <p class="dropzone-text">Cliquez ou glissez-déposez vos photos ici</p>
+
+            <span class="dropzone-sub">Formats acceptés: JPG, PNG, WEBP (Plusieurs photos possibles)</span>
+            <input type="file" id="photo-file-input" multiple accept="image/*" class="hidden-file-input" />
+          </div>
+        </div>
+
+        <div id="photo-preview-grid" class="photo-preview-grid hidden"></div>
+
+        <button type="submit" id="photo-upload-submit-btn" class="btn-luxury btn-gold w-full mt-3" disabled>
+          <span class="material-symbols-outlined">send</span> Téléverser les Photos 📸
+        </button>
+      </form>
+
+      <div id="photo-upload-progress" class="hidden" style="margin-top: 1rem; text-align: center;">
+        <div class="spinner-gold"></div>
+        <p style="font-family: var(--font-sans); font-size: 0.75rem; color: var(--gold-dark); margin-top: 0.5rem;">Enregistrement des photos sur le serveur...</p>
+      </div>
+
+      <div id="photo-upload-success" class="search-error-box hidden" style="background:#f0fdf4; border-color:#10b981; color:#047857; margin-top:1rem; text-align:center;">
+        Merci ! Vos photos ont été enregistrées avec succès ❤️
+      </div>
     </div>
   </div>
 

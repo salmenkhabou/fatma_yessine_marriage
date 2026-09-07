@@ -1767,6 +1767,190 @@ function initApp() {
 
   loadDynamicTimeline();
 
+  // ==========================================================================
+  // 10. QR Code & Invitation Sharing Logic
+  // ==========================================================================
+  const qrModal = document.getElementById('qr-modal');
+  const openQrBtn = document.getElementById('open-qr-btn');
+  const qrCloseBtn = document.getElementById('qr-close-btn');
+  const qrCodeImg = document.getElementById('qr-code-img');
+  const downloadQrBtn = document.getElementById('download-qr-btn');
+  const copyInvitationLinkBtn = document.getElementById('copy-invitation-link-btn');
+  const copyLinkToast = document.getElementById('copy-link-toast');
+
+  function initQrCode() {
+    const currentUrl = window.location.href;
+    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}&margin=10`;
+    if (qrCodeImg) qrCodeImg.src = qrApiUrl;
+    if (downloadQrBtn) downloadQrBtn.href = qrApiUrl;
+  }
+
+  if (openQrBtn) {
+    openQrBtn.addEventListener('click', () => {
+      initQrCode();
+      openModal(qrModal);
+    });
+  }
+  if (qrCloseBtn) qrCloseBtn.addEventListener('click', () => closeModal(qrModal));
+
+  if (copyInvitationLinkBtn) {
+    copyInvitationLinkBtn.addEventListener('click', () => {
+      const urlToCopy = window.location.href;
+      navigator.clipboard.writeText(urlToCopy).then(() => {
+        if (copyLinkToast) {
+          copyLinkToast.classList.remove('hidden');
+          setTimeout(() => copyLinkToast.classList.add('hidden'), 3500);
+        }
+      }).catch(() => {
+        prompt("Copiez ce lien d'invitation :", urlToCopy);
+      });
+    });
+  }
+
+  // ==========================================================================
+  // 11. Guest Photo Vault Upload Engine
+  // ==========================================================================
+  const photoUploadModal = document.getElementById('photo-upload-modal');
+  const openPhotoUploadBtn = document.getElementById('open-photo-upload-btn');
+  const photoUploadCloseBtn = document.getElementById('photo-upload-close-btn');
+  const photoFileInput = document.getElementById('photo-file-input');
+  const photoDropzone = document.getElementById('photo-dropzone');
+  const photoPreviewGrid = document.getElementById('photo-preview-grid');
+  const photoUploadSubmitBtn = document.getElementById('photo-upload-submit-btn');
+  const photoVaultForm = document.getElementById('photo-vault-form');
+  const photoUploadProgress = document.getElementById('photo-upload-progress');
+  const photoUploadSuccess = document.getElementById('photo-upload-success');
+
+  let selectedPhotoFiles = [];
+
+  if (openPhotoUploadBtn) {
+    openPhotoUploadBtn.addEventListener('click', () => openModal(photoUploadModal));
+  }
+  if (photoUploadCloseBtn) {
+    photoUploadCloseBtn.addEventListener('click', () => closeModal(photoUploadModal));
+  }
+
+  if (photoDropzone && photoFileInput) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      photoDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        photoDropzone.classList.add('drag-over');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      photoDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        photoDropzone.classList.remove('drag-over');
+      });
+    });
+
+    photoDropzone.addEventListener('drop', (e) => {
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      addPhotoFiles(files);
+    });
+
+    photoFileInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+      addPhotoFiles(files);
+    });
+  }
+
+  function addPhotoFiles(files) {
+    selectedPhotoFiles = [...selectedPhotoFiles, ...files];
+    renderPhotoPreviews();
+  }
+
+  function renderPhotoPreviews() {
+    if (!photoPreviewGrid) return;
+    photoPreviewGrid.innerHTML = '';
+
+    if (selectedPhotoFiles.length === 0) {
+      photoPreviewGrid.classList.add('hidden');
+      if (photoUploadSubmitBtn) photoUploadSubmitBtn.disabled = true;
+      return;
+    }
+
+    photoPreviewGrid.classList.remove('hidden');
+    if (photoUploadSubmitBtn) photoUploadSubmitBtn.disabled = false;
+
+    selectedPhotoFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const item = document.createElement('div');
+        item.className = 'photo-preview-item';
+        item.innerHTML = `
+          <img src="${e.target.result}" alt="Aperçu photo ${index+1}" />
+          <button type="button" class="photo-preview-remove" onclick="removePhotoFile(${index})">✕</button>
+        `;
+        photoPreviewGrid.appendChild(item);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  window.removePhotoFile = function(index) {
+    selectedPhotoFiles.splice(index, 1);
+    renderPhotoPreviews();
+  };
+
+  if (photoVaultForm) {
+    photoVaultForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (selectedPhotoFiles.length === 0) return;
+
+      const senderName = document.getElementById('photo-sender-name').value.trim();
+      if (photoUploadSubmitBtn) photoUploadSubmitBtn.disabled = true;
+      if (photoUploadProgress) photoUploadProgress.classList.remove('hidden');
+      if (photoUploadSuccess) photoUploadSuccess.classList.add('hidden');
+
+      const photoPayload = [];
+      let processedCount = 0;
+
+      selectedPhotoFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          photoPayload.push({
+            name: file.name,
+            data: evt.target.result
+          });
+          processedCount++;
+
+          if (processedCount === selectedPhotoFiles.length) {
+            fetch('/api/photos/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ senderName, photos: photoPayload })
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                selectedPhotoFiles = [];
+                renderPhotoPreviews();
+                photoVaultForm.reset();
+                if (photoUploadSuccess) photoUploadSuccess.classList.remove('hidden');
+                setTimeout(() => {
+                  if (photoUploadSuccess) photoUploadSuccess.classList.add('hidden');
+                  closeModal(photoUploadModal);
+                }, 3000);
+              } else {
+                alert(data.error || "Erreur lors du téléversement.");
+              }
+            })
+            .catch(err => {
+              alert("Erreur réseau lors de l'enregistrement des photos.");
+            })
+            .finally(() => {
+              if (photoUploadProgress) photoUploadProgress.classList.add('hidden');
+              if (photoUploadSubmitBtn) photoUploadSubmitBtn.disabled = false;
+            });
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
   function escapeJs(str) {
     if (!str) return '';
     return String(str).replace(/'/g, "\\'").replace(/"/g, '\\"');

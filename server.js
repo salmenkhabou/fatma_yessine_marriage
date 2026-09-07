@@ -12,6 +12,8 @@ const SONGS_FILE = path.join(__dirname, 'songs.json');
 const EVENTS_FILE = path.join(__dirname, 'events.json');
 const MESSAGES_FILE = path.join(__dirname, 'messages.json');
 const TIMELINE_FILE = path.join(__dirname, 'timeline.json');
+const PHOTOS_FILE = path.join(__dirname, 'photos.json');
+const PHOTOS_DIR = path.join(__dirname, 'uploads', 'photos');
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',
@@ -20,7 +22,7 @@ const ADMIN_CREDENTIALS = {
 const ADMIN_TOKEN = 'yf-admin-token-secret-2026';
 
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
   res.set('Pragma', 'no-cache');
@@ -54,12 +56,20 @@ function ensureFileExists(filePath, defaultValue = '[]') {
   }
 }
 
+function ensureDirExists(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
 ensureFileExists(GUESTS_FILE, '[]');
 ensureFileExists(RSVP_FILE, '[]');
 ensureFileExists(SONGS_FILE, '[]');
 ensureFileExists(EVENTS_FILE, '[]');
 ensureFileExists(MESSAGES_FILE, '[]');
 ensureFileExists(TIMELINE_FILE, '[]');
+ensureFileExists(PHOTOS_FILE, '[]');
+ensureDirExists(PHOTOS_DIR);
 
 function requireAdmin(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -578,6 +588,95 @@ app.post('/api/admin/timeline/reorder', requireAdmin, (req, res) => {
     return res.json({ success: true, timeline: reordered });
   } catch (err) {
     console.error('Error reordering timeline:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+// --------------------------------------------------------------------------
+// 7. Guest Photo Vault Endpoints
+// --------------------------------------------------------------------------
+app.get('/api/photos', (req, res) => {
+  try {
+    const photos = JSON.parse(fs.readFileSync(PHOTOS_FILE, 'utf8') || '[]');
+    const sorted = photos.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+    return res.json(sorted);
+  } catch (err) {
+    console.error('Error fetching photos:', err);
+    return res.status(500).json({ error: 'Failed to fetch photos' });
+  }
+});
+
+app.post('/api/photos/upload', (req, res) => {
+  try {
+    const { senderName, photos } = req.body;
+    if (!Array.isArray(photos) || photos.length === 0) {
+      return res.status(400).json({ error: 'Aucune photo sélectionnée.' });
+    }
+
+    const currentPhotos = JSON.parse(fs.readFileSync(PHOTOS_FILE, 'utf8') || '[]');
+    const name = (senderName && senderName.trim()) ? senderName.trim() : 'Invité Anonyme';
+    const savedItems = [];
+
+    photos.forEach((photoObj, idx) => {
+      if (!photoObj.data) return;
+      
+      const matches = photoObj.data.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      let ext = 'jpg';
+      let buffer;
+
+      if (matches && matches.length === 3) {
+        const mime = matches[1];
+        if (mime.includes('png')) ext = 'png';
+        else if (mime.includes('gif')) ext = 'gif';
+        else if (mime.includes('webp')) ext = 'webp';
+        buffer = Buffer.from(matches[2], 'base64');
+      } else {
+        buffer = Buffer.from(photoObj.data, 'base64');
+      }
+
+      const filename = `photo_${Date.now()}_${idx}_${Math.floor(Math.random()*1000)}.${ext}`;
+      const filePath = path.join(PHOTOS_DIR, filename);
+
+      fs.writeFileSync(filePath, buffer);
+
+      const record = {
+        id: 'photo-' + Date.now() + '-' + idx,
+        filename,
+        originalName: photoObj.name || filename,
+        url: `/uploads/photos/${filename}`,
+        senderName: name,
+        uploadedAt: new Date().toISOString()
+      };
+
+      currentPhotos.push(record);
+      savedItems.push(record);
+    });
+
+    fs.writeFileSync(PHOTOS_FILE, JSON.stringify(currentPhotos, null, 2), 'utf8');
+    return res.status(201).json({ success: true, count: savedItems.length, photos: savedItems });
+  } catch (err) {
+    console.error('Error uploading photos:', err);
+    return res.status(500).json({ error: 'Erreur lors de l\'enregistrement des photos.' });
+  }
+});
+
+app.delete('/api/admin/photos/:id', requireAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    let photos = JSON.parse(fs.readFileSync(PHOTOS_FILE, 'utf8') || '[]');
+    const target = photos.find(p => p.id === id);
+
+    if (target) {
+      const filePath = path.join(PHOTOS_DIR, target.filename);
+      if (fs.existsSync(filePath)) {
+        try { fs.unlinkSync(filePath); } catch (e) {}
+      }
+      photos = photos.filter(p => p.id !== id);
+      fs.writeFileSync(PHOTOS_FILE, JSON.stringify(photos, null, 2), 'utf8');
+    }
+
+    return res.json({ success: true, message: 'Photo supprimée.' });
+  } catch (err) {
+    console.error('Error deleting photo:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
