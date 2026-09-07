@@ -1715,9 +1715,9 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(44, 40, 36, 0.5); /* Outer shadow overlay */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(30, 24, 18, 0.65); /* Warm dark shadow overlay */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 2000;
   display: flex;
   justify-content: center;
@@ -1733,43 +1733,59 @@ body {
   visibility: visible;
 }
 
+.modal-drag-handle {
+  width: 44px;
+  height: 5px;
+  background: rgba(180, 140, 70, 0.35);
+  border-radius: 10px;
+  margin: 0 auto 1.25rem;
+  display: none;
+}
+
 .modal-container {
-  background-color: #fcfbf9;
-  border: 1px solid rgba(44, 40, 36, 0.4);
-  outline: 1px solid rgba(44, 40, 36, 0.4);
-  outline-offset: -8px;
-  border-radius: 8px;
+  background: linear-gradient(145deg, #FFFFFF 0%, #FDF4EB 100%);
+  border: 1.5px solid var(--gold, #CFAB66);
+  border-radius: 24px;
   max-width: 480px;
   width: 100%;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.20);
-  padding: 2.25rem 2rem;
+  box-shadow: 0 25px 65px rgba(128, 107, 67, 0.28), 0 4px 15px rgba(0, 0, 0, 0.06);
+  padding: 2.25rem 1.75rem;
   position: relative;
-  transform: scale(0.93);
+  transform: scale(0.93) translateY(10px);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-overlay.active .modal-container {
-  transform: scale(1);
+  transform: scale(1) translateY(0);
 }
 
 .modal-close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  background: none;
-  border: none;
-  color: #999;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(207, 171, 102, 0.14);
+  border: 1px solid rgba(207, 171, 102, 0.3);
+  color: var(--gold-dark, #806B43);
   cursor: pointer;
   outline: none;
-  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
 }
 
-.modal-close:hover {
-  color: var(--charcoal);
+.modal-close:hover,
+.modal-close:active {
+  background: var(--gold-dark, #806B43);
+  color: #ffffff;
+  transform: scale(1.05);
 }
 
 .modal-close span {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
 }
 
 .modal-title {
@@ -4020,18 +4036,38 @@ html, body {
   padding: 0 1rem 4rem;
 }
 
-/* Modals Mobile Scroll & Dynamic Sizing */
-.modal-overlay {
-  padding: 0.75rem !important;
-}
+/* Modals Mobile Bottom Sheet & Phone Responsiveness */
+@media screen and (max-width: 640px) {
+  .modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
 
-.modal-container {
-  max-height: 90vh !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
-  padding: 1.75rem 1.25rem !important;
-  width: 100% !important;
-  margin: auto !important;
+  .modal-container {
+    border-radius: 28px 28px 0 0 !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 1.75rem 1.25rem 2.5rem !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-bottom: none !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .modal-overlay.active .modal-container {
+    transform: translateY(0) !important;
+  }
+
+  .modal-drag-handle {
+    display: block !important;
+  }
+
+  .modal-close {
+    top: 1rem !important;
+    right: 1rem !important;
+  }
 }
 
 /* Responsive Media Queries for Mobile Screens (<= 520px) */
@@ -4141,52 +4177,83 @@ html, body {
 
 /* Photo Dropzone & Vault Styles */
 .photo-drop-area {
-  border: 2px dashed var(--gold, #CFAB66);
-  background: rgba(253, 244, 235, 0.5);
-  border-radius: 16px;
-  padding: 1.5rem 1rem;
+  border: 2px dashed rgba(207, 171, 102, 0.6);
+  background: linear-gradient(145deg, rgba(253, 244, 235, 0.7) 0%, rgba(249, 237, 224, 0.4) 100%);
+  border-radius: 20px;
+  padding: 1.65rem 1.25rem;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .photo-drop-area:hover,
 .photo-drop-area.drag-over {
-  background: rgba(207, 171, 102, 0.12);
+  background: rgba(207, 171, 102, 0.16);
   border-color: var(--gold-dark, #806B43);
-  transform: scale(1.01);
+  transform: scale(0.99);
 }
 
-.dropzone-icon {
-  font-size: 2.4rem !important;
+.dropzone-icon-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFFDF8 0%, #F4E8D6 100%);
+  box-shadow: 0 4px 15px rgba(180, 140, 70, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--gold-dark, #806B43);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
 }
 
-.dropzone-text {
-  font-family: var(--font-sans, 'Montserrat', sans-serif);
-  font-size: 0.78rem;
+.dropzone-icon-circle span {
+  font-size: 26px !important;
+}
+
+.dropzone-title {
+  font-family: var(--font-title, 'Cinzel', serif);
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--charcoal, #382E25);
-  margin-bottom: 0.2rem;
+  margin: 0;
 }
 
-.dropzone-sub {
+.dropzone-subtitle {
+  font-family: var(--font-sans, 'Montserrat', sans-serif);
+  font-size: 0.72rem;
+  color: rgba(56, 46, 37, 0.65);
+  margin: 0;
+}
+
+.dropzone-badge {
   font-family: var(--font-sans, 'Montserrat', sans-serif);
   font-size: 0.62rem;
-  color: #777;
-  display: block;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--gold-dark, #806B43);
+  background: rgba(207, 171, 102, 0.2);
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-top: 0.3rem;
 }
 
 .hidden-file-input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
 }
 
 .photo-preview-grid {

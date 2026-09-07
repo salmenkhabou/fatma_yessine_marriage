@@ -614,12 +614,13 @@
   <!-- MODAL: GUEST PHOTO UPLOAD VAULT -->
   <div id="photo-upload-modal" class="modal-overlay">
     <div class="modal-container photo-modal-container" style="max-width: 480px;">
+      <div class="modal-drag-handle"></div>
       <button class="modal-close" id="photo-upload-close-btn" aria-label="Fermer le modal photo">
         <span class="material-symbols-outlined">close</span>
       </button>
 
-      <h3 class="modal-title">Déposer vos Photos</h3>
-      <p class="modal-subtitle">Partagez vos plus beaux clichés du mariage avec Yessine & Fatma 📸</p>
+      <h3 class="modal-title">Déposer vos Photos 📸</h3>
+      <p class="modal-subtitle">Partagez vos plus beaux clichés du mariage avec Yessine & Fatma</p>
 
       <form id="photo-vault-form" class="luxury-form mt-3">
         <div class="form-group">
@@ -628,12 +629,14 @@
         </div>
 
         <div class="form-group">
-          <label>Sélectionnez ou Glissez vos Photos</label>
+          <label>Vos Photos de Mariage</label>
           <div id="photo-dropzone" class="photo-drop-area">
-            <span class="material-symbols-outlined dropzone-icon">cloud_upload</span>
-            <p class="dropzone-text">Cliquez ou glissez-déposez vos photos ici</p>
-
-            <span class="dropzone-sub">Formats acceptés: JPG, PNG, WEBP (Plusieurs photos possibles)</span>
+            <div class="dropzone-icon-circle">
+              <span class="material-symbols-outlined">add_photo_alternate</span>
+            </div>
+            <h4 class="dropzone-title">Toucher pour choisir des photos</h4>
+            <p class="dropzone-subtitle">ou glissez-déposez vos fichiers ici</p>
+            <div class="dropzone-badge">JPG, PNG, WEBP • Plusieurs photos</div>
             <input type="file" id="photo-file-input" multiple accept="image/*" class="hidden-file-input" />
           </div>
         </div>
@@ -641,7 +644,7 @@
         <div id="photo-preview-grid" class="photo-preview-grid hidden"></div>
 
         <button type="submit" id="photo-upload-submit-btn" class="btn-luxury btn-gold w-full mt-3" disabled>
-          <span class="material-symbols-outlined">send</span> Téléverser les Photos 📸
+          <span class="material-symbols-outlined">cloud_upload</span> Téléverser les Photos
         </button>
       </form>
 
