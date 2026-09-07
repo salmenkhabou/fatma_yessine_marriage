@@ -476,7 +476,7 @@ function initApp() {
                   </button>
                 ` : ''}
                 <a href="${evt.googleMapsUrl || '#'}" target="_blank" rel="noopener" class="btn-luxury btn-gold-outline btn-xs" onclick="event.stopPropagation();">
-                  <span class="material-symbols-outlined">navigation</span> Google Maps
+                  <span class="material-symbols-outlined">near_me</span> Google Maps
                 </a>
               </div>
             </div>
@@ -536,7 +536,7 @@ function initApp() {
             <span class="material-symbols-outlined">location_on</span> ${escapeHtml(evt.locationName)} ${evt.address ? `(${escapeHtml(evt.address)})` : ''}
           </p>
           <a href="${evt.googleMapsUrl || '#'}" target="_blank" rel="noopener" class="btn-luxury btn-gold modal-map-btn">
-            <span class="material-symbols-outlined">navigation</span> Ouvre Google Maps
+            <span class="material-symbols-outlined">near_me</span> Google Maps
           </a>
         `;
         grid.appendChild(card);
@@ -1729,7 +1729,7 @@ function initApp() {
                   </button>
                 ` : ''}
                 <a href="${gMapsUrl}" target="_blank" rel="noopener" class="btn-timeline-map btn-google-map" onclick="event.stopPropagation();">
-                  <span class="material-symbols-outlined">navigation</span> Google Maps
+                  <span class="material-symbols-outlined">near_me</span> Google Maps
                 </a>
               </div>
             </div>
