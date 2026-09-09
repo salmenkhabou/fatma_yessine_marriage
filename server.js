@@ -17,7 +17,7 @@ const PHOTOS_DIR = path.join(__dirname, 'uploads', 'photos');
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',
-  password: 'admin123'
+  password: 'admin'
 };
 const ADMIN_TOKEN = 'yf-admin-token-secret-2026';
 
